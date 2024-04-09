@@ -2,7 +2,17 @@
 export default {
 	content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}'],
 	theme: {
-		extend: {},
+		extend: {
+      gridTemplateColumns: {
+        'header': '2rem auto',
+      },
+      gridTemplateRows: {
+        'nav': '3.5rem auto'
+      },
+      height: {
+        '120': '30rem'
+      }
+    },
 	},
 	plugins: [],
 }
