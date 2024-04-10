@@ -3,14 +3,14 @@
 ---
 
 <header
-  class="fixed w-full bg-blue-950 h-16 grid place-items-center grid-cols-header px-3"
+  class="fixed z-10 w-full bg-blue-950 h-16 grid place-items-center grid-cols-header px-3"
 >
   <button data-button="open" class="w-full h-7 grid place-items-center">
     <span class="w-full block bg-white h-0.5"></span>
     <span class="w-full block bg-white h-0.5"></span>
     <span class="w-full block bg-white h-0.5"></span>
   </button>
-  <p class="text-3xl text-white font-bold text-center">YETI HIDEOUT</p>
+  <p class="text-3xl text-white font-bold text-center">Yeti Hideout</p>
   <nav data-nav class="transition-transform -translate-x-full absolute grid grid-rows-nav top-0 bg-white left-0 z-10 w-80 h-120">
     <div class="h-14">
       <button data-button="close" class="w-14 aspect-square">
@@ -20,26 +20,31 @@
     </div>
     <ul class="w-full self-center grid auto-rows-max gap-8 text-3xl pl-16">
       <li>
-        <a href="/">Home</a>
+        <a data-link href="/">Home</a>
       </li>
       <li>
-        <a href="/">Articles</a>
+        <a data-link href="/">Articles</a>
       </li>
       <li>
-        <a href="/photos/">Photo</a>
+        <a data-link href="/photos/">Photo</a>
       </li>
     </ul>
   </nav>
 </header>
 
 <script>
-  const btn_open = document.querySelector('[data-button="open"]');
-  const btn_close = document.querySelector('[data-button="close"]');
-  const nav = document.querySelector("[data-nav]");
-  btn_open?.addEventListener("click", () => {
-    nav?.classList.replace("-translate-x-full", "translate-x-0");
-  });
-  btn_close?.addEventListener("click", () => {
-    nav?.classList.replace("translate-x-0", "-translate-x-full");
-  });
+  document.addEventListener('astro:page-load', () => {
+    const btn_open = document.querySelector('[data-button="open"]');
+    const btn_close = document.querySelector('[data-button="close"]');
+    const nav = document.querySelector("[data-nav]");
+    btn_open?.addEventListener("click", () => {
+      nav?.classList.replace("-translate-x-full", "translate-x-0");
+      if(nav?.classList.contains('invisible')) {
+        nav?.classList.remove('invisible')
+      }
+    });
+    btn_close?.addEventListener("click", () => {
+      nav?.classList.replace("translate-x-0", "-translate-x-full");
+    });
+  })
 </script>

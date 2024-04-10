@@ -1,0 +1,14 @@
+---
+import Layout from "./Layout.astro";
+import ImageFrame from "../modules/ImageFrame.astro";
+const {frontmatter} = Astro.props
+---
+
+<Layout title={frontmatter.img}>
+  <h1>{frontmatter.img}</h1>
+  <div transition:name={frontmatter.img}>
+    <ImageFrame srcPaths={[`photos/${frontmatter.img}.jpg`]} />
+  </div>
+  <slot />
+  <a href="/photos">back</a>
+</Layout>

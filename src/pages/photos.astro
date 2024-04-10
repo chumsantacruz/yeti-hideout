@@ -2,7 +2,7 @@
 import Layout from "../layouts/Layout.astro";
 import ImageFrame from "../modules/ImageFrame.astro";
 
-const photoPaths = Object.keys(import.meta.glob("../images/photos/*.JPG"));
+const photoPaths = Object.keys(import.meta.glob("../images/photos/*.jpg"));
 const trimPhotoPaths = photoPaths.map((photo) => photo.slice(10));
 ---
 
@@ -10,10 +10,10 @@ const trimPhotoPaths = photoPaths.map((photo) => photo.slice(10));
   <h1>photos</h1>
   <div class="grid grid-cols-3 gap-1">
     {
-      trimPhotoPaths.map((src) => (
-        <div class="aspect-square">
+      trimPhotoPaths.map((src, i) => (
+        <a transition:name={`photo-${i + 1}`}  href={`/photos/photo-${i + 1}`} class="aspect-square block">
           <ImageFrame srcPaths={[src]} classNames="h-full object-cover" />
-        </div>
+        </a>
       ))
     }
   </div>
