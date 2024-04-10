@@ -16,6 +16,16 @@ const {frontmatter} = Astro.props
       film: {frontmatter.film}
     </p>
     <slot />
-    <a href="/photo/">back</a>
+    <a class="cursor-pointer" data-back>back</a>
   </div>
 </Layout>
+
+<script>
+  document.addEventListener('astro:page-load', () => {
+    const back = document.querySelector('[data-back')
+
+    back?.addEventListener('click', () => {
+      history.back()
+    })
+  })
+</script>
