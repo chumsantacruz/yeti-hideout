@@ -5,10 +5,17 @@ const {frontmatter} = Astro.props
 ---
 
 <Layout title={frontmatter.img}>
-  <h1>{frontmatter.img}</h1>
-  <div transition:name={frontmatter.img}>
-    <ImageFrame srcPaths={[`photos/${frontmatter.img}.jpg`]} />
+  <div class="grid gap-5">
+    <h1>{frontmatter.img}</h1>
+    <div transition:name={frontmatter.img}>
+      <ImageFrame srcPaths={[`photos/${frontmatter.img}.jpg`]} />
+    </div>
+    <p>
+      camera: {frontmatter.camera}
+      <br>
+      film: {frontmatter.film}
+    </p>
+    <slot />
+    <a href="/photo/">back</a>
   </div>
-  <slot />
-  <a href="/photos">back</a>
 </Layout>

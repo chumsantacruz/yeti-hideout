@@ -20,7 +20,7 @@ const { title } = Astro.props;
     <title>{title}</title>
     <ViewTransitions />
   </head>
-  <body class="bg-gray-100">
+  <body class="bg-gray-100 min-h-svh grid grid-rows-layout">
     <Header />
     <main class="px-5 pt-24 pb-8">
       <slot />
