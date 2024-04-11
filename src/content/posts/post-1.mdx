@@ -12,3 +12,46 @@ Astroを使って作ってみたよ
 - 技術記事（書けるか分からんけど）
 - ブログ的な
 - フィルムで撮った写真
+
+```js title="my-test-file.js"
+console.log('hello world')
+document.addEventListener("astro:page-load", () => {
+  const btn_open = document.querySelector('[data-button="open"]');
+  const btn_close = document.querySelector('[data-button="close"]');
+  const nav = document.querySelector("[data-nav]");
+  btn_open?.addEventListener("click", () => {
+    nav?.classList.replace("-translate-x-full", "translate-x-0");
+    if (nav?.classList.contains("invisible")) {
+      nav?.classList.remove("invisible");
+    }
+  });
+  btn_close?.addEventListener("click", () => {
+    nav?.classList.replace("translate-x-0", "-translate-x-full");
+  });
+});
+```
+<br />
+```powershell title="PowerShell terminal example"
+Write-Output "This one has a title!"
+```
+<br />
+```js {1, 4, 7-8}
+// Line 1 - targeted by line number
+// Line 2
+// Line 3
+// Line 4 - targeted by line number
+// Line 5
+// Line 6
+// Line 7 - targeted by range "7-8"
+// Line 8 - targeted by range "7-8"
+```
+<br />
+```js title="line-markers.js" del={2} ins={3-4} {6}
+function demo() {
+  console.log('this line is marked as deleted')
+  // This line and the next one are marked as inserted
+  console.log('this is the second inserted line')
+
+  return 'this line uses the neutral default marker type'
+}
+```
