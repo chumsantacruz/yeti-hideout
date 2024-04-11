@@ -2,7 +2,8 @@
 
 <script>
   document.addEventListener("astro:page-load", () => {
-    const back = document.querySelector("[data-back");
+    console.log('loaded');
+    const back = document.querySelector("[data-back]");
 
     back?.addEventListener("click", () => {
       history.back();

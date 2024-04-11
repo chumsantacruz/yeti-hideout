@@ -1,12 +1,15 @@
 ---
 import Layout from "./Layout.astro";
 import BackLink from "../components/BackLink.astro";
+import '../styles/post.scss'
 const {frontmatter} = Astro.props
 ---
 
 <Layout title={frontmatter.title}>
-  <h1 class="text-xl text-orange-500">{frontmatter.title}</h1>
-  <p>{frontmatter.pubDate.toString()}</p>
-  <slot />
+  <div class="markdown">
+    <h1>{frontmatter.title}</h1>
+    <p>日付: {frontmatter.pubDate.toLocaleDateString("ja-JP")}</p>
+    <slot />
+  </div>
   <BackLink />
 </Layout>
