@@ -3,6 +3,7 @@
 ---
 
 <header
+  transition:name="header"
   transition:animate="none"
   class="sticky top-0 z-50 w-full bg-blue-950 h-16 grid place-items-center grid-cols-header px-5"
 >
@@ -53,3 +54,9 @@
     });
   });
 </script>
+
+<style is:global>
+  html::view-transition-group(header) {
+    z-index: 50;
+  }
+</style>
