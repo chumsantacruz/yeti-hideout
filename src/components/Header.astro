@@ -3,18 +3,22 @@
 ---
 
 <header
-  class="fixed z-10 w-full bg-blue-950 h-16 grid place-items-center grid-cols-header px-5"
+  class="sticky top-0 z-50 w-full bg-blue-950 h-16 grid place-items-center grid-cols-header px-5"
 >
   <button data-button="open" class="w-full h-7 grid place-items-center">
     <span class="w-full block bg-white h-0.5"></span>
     <span class="w-full block bg-white h-0.5"></span>
     <span class="w-full block bg-white h-0.5"></span>
   </button>
-  <p class="text-3xl -ml-6 text-white font-bold text-center ">Yeti Hideout</p>
-  <nav data-nav class="transition-transform -translate-x-full px-5 pt-2 absolute grid grid-rows-nav top-0 bg-white left-0 z-10 w-80 h-120">
+  <p class="text-3xl -ml-6 text-white font-bold text-center">Yeti Hideout</p>
+  <nav
+    data-nav
+    class="transition-transform -translate-x-full px-5 pt-2 absolute grid grid-rows-nav top-0 bg-white left-0 z-10 w-80 h-120"
+  >
     <div class="h-14">
       <button data-button="close" class="w-14 aspect-square">
-        <span class="block w-12 h-0.5 bg-black rotate-45 translate-y-0.5"></span>
+        <span class="block w-12 h-0.5 bg-black rotate-45 translate-y-0.5"
+        ></span>
         <span class="block w-12 h-0.5 bg-black -rotate-45"></span>
       </button>
     </div>
@@ -33,18 +37,18 @@
 </header>
 
 <script>
-  document.addEventListener('astro:page-load', () => {
+  document.addEventListener("astro:page-load", () => {
     const btn_open = document.querySelector('[data-button="open"]');
     const btn_close = document.querySelector('[data-button="close"]');
     const nav = document.querySelector("[data-nav]");
     btn_open?.addEventListener("click", () => {
       nav?.classList.replace("-translate-x-full", "translate-x-0");
-      if(nav?.classList.contains('invisible')) {
-        nav?.classList.remove('invisible')
+      if (nav?.classList.contains("invisible")) {
+        nav?.classList.remove("invisible");
       }
     });
     btn_close?.addEventListener("click", () => {
       nav?.classList.replace("translate-x-0", "-translate-x-full");
     });
-  })
+  });
 </script>

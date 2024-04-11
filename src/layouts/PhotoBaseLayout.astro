@@ -1,31 +1,31 @@
 ---
 import Layout from "./Layout.astro";
 import ImageFrame from "../modules/ImageFrame.astro";
-const {frontmatter} = Astro.props
+const { frontmatter } = Astro.props;
 ---
 
 <Layout title={frontmatter.img}>
   <div class="grid gap-5">
     <h1>{frontmatter.img}</h1>
-    <div transition:name={frontmatter.img}>
+    <div transition:name={frontmatter.img} class="grid place-items-center">
       <ImageFrame srcPaths={[`photos/${frontmatter.img}.jpg`]} />
     </div>
     <p>
       camera: {frontmatter.camera}
-      <br>
+      <br />
       film: {frontmatter.film}
     </p>
     <slot />
-    <a class="cursor-pointer" data-back>back</a>
+    <a class="cursor-pointer select-none underline" data-back>back</a>
   </div>
 </Layout>
 
 <script>
-  document.addEventListener('astro:page-load', () => {
-    const back = document.querySelector('[data-back')
+  document.addEventListener("astro:page-load", () => {
+    const back = document.querySelector("[data-back");
 
-    back?.addEventListener('click', () => {
-      history.back()
-    })
-  })
+    back?.addEventListener("click", () => {
+      history.back();
+    });
+  });
 </script>
