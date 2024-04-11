@@ -1,6 +1,7 @@
 ---
 import Layout from "./Layout.astro";
 import ImageFrame from "../modules/ImageFrame.astro";
+import BackLink from "../components/BackLink.astro";
 const { frontmatter } = Astro.props;
 ---
 
@@ -16,16 +17,7 @@ const { frontmatter } = Astro.props;
       film: {frontmatter.film}
     </p>
     <slot />
-    <a class="cursor-pointer select-none underline" data-back>back</a>
+    <BackLink />
   </div>
 </Layout>
 
-<script>
-  document.addEventListener("astro:page-load", () => {
-    const back = document.querySelector("[data-back");
-
-    back?.addEventListener("click", () => {
-      history.back();
-    });
-  });
-</script>

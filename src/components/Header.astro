@@ -3,14 +3,14 @@
 ---
 
 <header
-  class="sticky top-0 z-50 w-full bg-blue-950 h-16 grid place-items-center grid-cols-header px-5"
+  class="sticky shadow top-0 z-50 w-full bg-slate-50  h-16 grid place-items-center grid-cols-header px-5"
 >
   <button data-button="open" class="w-full h-7 grid place-items-center">
-    <span class="w-full block bg-white h-0.5"></span>
-    <span class="w-full block bg-white h-0.5"></span>
-    <span class="w-full block bg-white h-0.5"></span>
+    <span class="w-full block bg-black h-0.5"></span>
+    <span class="w-full block bg-black h-0.5"></span>
+    <span class="w-full block bg-black h-0.5"></span>
   </button>
-  <p class="text-3xl -ml-6 text-white font-bold text-center">Yeti Hideout</p>
+  <p class="text-3xl -ml-6 text-black font-bold text-center">Yeti Hideout</p>
   <nav
     data-nav
     class="transition-transform -translate-x-full px-5 pt-2 absolute grid grid-rows-nav top-0 bg-white left-0 z-10 w-80 h-120"
@@ -27,7 +27,7 @@
         <a data-link href="/">Home</a>
       </li>
       <li>
-        <a data-link href="/">Articles</a>
+        <a data-link href="/posts/">Posts</a>
       </li>
       <li>
         <a data-link href="/photo/">Photo</a>
@@ -52,9 +52,3 @@
     });
   });
 </script>
-
-<style is:global>
-  html::view-transition-group(header) {
-    z-index: 50;
-  }
-</style>

@@ -1,0 +1,11 @@
+<a class="cursor-pointer select-none underline" data-back>back</a>
+
+<script>
+  document.addEventListener("astro:page-load", () => {
+    const back = document.querySelector("[data-back");
+
+    back?.addEventListener("click", () => {
+      history.back();
+    });
+  });
+</script>

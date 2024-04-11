@@ -1,0 +1,12 @@
+---
+import Layout from "./Layout.astro";
+import BackLink from "../components/BackLink.astro";
+const {frontmatter} = Astro.props
+---
+
+<Layout title={frontmatter.title}>
+  <h1 class="text-xl text-orange-500">{frontmatter.title}</h1>
+  <p>{frontmatter.pubDate.toString()}</p>
+  <slot />
+  <BackLink />
+</Layout>

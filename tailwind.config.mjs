@@ -8,7 +8,7 @@ export default {
       },
       gridTemplateRows: {
         'nav': '3.5rem auto',
-        'layout': '1fr max-content'
+        'layout': 'max-content 1fr max-content'
       },
       height: {
         '120': '30rem'
