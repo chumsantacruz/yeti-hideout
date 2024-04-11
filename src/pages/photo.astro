@@ -16,8 +16,8 @@ const sortedPaths = trimPhotoPaths.sort((a, b) => {
   <div class="grid grid-cols-3 gap-1">
     {
       sortedPaths.map((src) => (
-        <a transition:name={`${src.slice(0, -4)}`}  href={`/photos/${src.slice(0, -4)}/`} class="aspect-square block">
-          <ImageFrame srcPaths={[`photos/${src}`]} classNames="h-full object-cover" loading="eager" />
+        <a href={`/photos/${src.slice(0, -4)}/`} class="aspect-square block">
+          <ImageFrame srcPaths={[`photos/${src}`]} classNames="h-full object-cover"/>
         </a>
       ))
     }
