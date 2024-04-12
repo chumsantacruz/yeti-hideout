@@ -8,7 +8,7 @@ const posts = await getCollection('posts')
 <Layout title="posts">
   <ol class="list-decimal list-inside">
     {posts.map(post => (
-      <li><a href={`/posts/${post.slug}/`}>{post.data.title}</a></li>
+      <li><a href={`/posts/${post.slug}/`} data-astro-prefetch>{post.data.title}</a></li>
     ))}
   </ol>
 </Layout>

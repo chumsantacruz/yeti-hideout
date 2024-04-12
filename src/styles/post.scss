@@ -63,5 +63,10 @@
 
   .expressive-code {
     margin-block: 1rem;
+    width: 100%;
+
+    & pre {
+      overflow-x: scroll;
+    }
   }
 }
