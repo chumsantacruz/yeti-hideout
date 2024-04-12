@@ -12,7 +12,10 @@ export const getStaticPaths = (async ({ paginate }) => {
     const filterdPhotos = photos.filter((photo) =>
       photo.data.camera.includes(camera)
     );
-    return paginate(filterdPhotos, {
+    const sortedFilterdPhoto = filterdPhotos.sort((a, b) => {
+      return +a.slug.replace("photo-", "") - +b.slug.replace("photo-", "");
+    });
+    return paginate(sortedFilterdPhoto, {
       params: { camera },
       pageSize: 9,
     });
