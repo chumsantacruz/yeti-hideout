@@ -1,0 +1,40 @@
+---
+import type { GetStaticPaths } from "astro";
+import Layout from "../../layouts/Layout.astro";
+import ImageFrame from "../../modules/ImageFrame.astro";
+
+export const getStaticPaths = (async ({ paginate }) => {
+  const photoPaths = Object.keys(import.meta.glob("../../images/photos/*.jpg"));
+  const trimPhotoPaths = photoPaths.map((photo) => photo.slice(20));
+  const sortedPaths = trimPhotoPaths.sort((a, b) => {
+    const prev = +a.slice(6, -4);
+    const current = +b.slice(6, -4);
+    return prev - current;
+  });
+  return paginate(
+    sortedPaths.map((path) => ({ src: path })),
+    { pageSize: 9 }
+  );
+}) satisfies GetStaticPaths;
+
+const { page } = Astro.props;
+---
+
+<Layout title="photo">
+  <h1>photo {page.currentPage}</h1>
+  <div class="grid grid-cols-3 gap-1">
+    {
+      page.data.map(({ src }) => (
+        <a href={`/photos/${src.slice(0, -4)}/`} class="aspect-square block">
+          <ImageFrame
+            srcPaths={[`photos/${src}`]}
+            classNames="h-full object-cover"
+          />
+        </a>
+      ))
+    }
+  </div>
+  {page.url.prev ? <a href={page.url.prev}>Previous</a> : null}
+  <br />
+  {page.url.next ? <a href={page.url.next}>Next</a> : null}
+</Layout>
