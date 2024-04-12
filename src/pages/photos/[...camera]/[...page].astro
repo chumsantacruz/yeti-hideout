@@ -1,0 +1,57 @@
+---
+import type { GetStaticPaths } from "astro";
+import Layout from "../../../layouts/Layout.astro";
+import { getCollection } from "astro:content";
+import ImageFrame from "../../../modules/ImageFrame.astro";
+import BackLink from "../../../components/BackLink.astro";
+
+export const getStaticPaths = (async ({ paginate }) => {
+  const photos = await getCollection("photos");
+  const uniqueCameras = [...new Set(photos.map((photo) => photo.data.camera))];
+  return uniqueCameras.flatMap((camera) => {
+    const filterdPhotos = photos.filter((photo) =>
+      photo.data.camera.includes(camera)
+    );
+    return paginate(filterdPhotos, {
+      params: { camera },
+      pageSize: 9,
+    });
+  });
+}) satisfies GetStaticPaths;
+
+const { page } = Astro.props;
+const params = Astro.params;
+---
+
+<Layout title="test">
+  <h1>{params.camera} page:{page.currentPage}</h1>
+  <div class="grid grid-cols-3 grid-rows-3 gap-1 mt-3">
+    {
+      page.data.map((photo) => (
+        <a href={`/photos/${photo.slug}/`} class="aspect-square block">
+          <ImageFrame
+            srcPaths={[`photos/${photo.slug}.jpg`]}
+            classNames="h-full object-cover"
+          />
+        </a>
+      ))
+    }
+  </div>
+  <div class="grid grid-cols-2 mt-3">
+    {
+      page.url.prev ? (
+        <a class="" href={page.url.prev}>
+          Previous
+        </a>
+      ) : null
+    }
+    {
+      page.url.next ? (
+        <a class="col-start-2 col-end-3 justify-self-end" href={page.url.next}>
+          Next
+        </a>
+      ) : null
+    }
+  </div>
+  <BackLink />
+</Layout>

@@ -3,7 +3,7 @@ import type { GetStaticPaths } from "astro";
 import Layout from "../../layouts/Layout.astro";
 import ImageFrame from "../../modules/ImageFrame.astro";
 
-export const getStaticPaths = (async ({ paginate }) => {
+export const getStaticPaths = (({ paginate }) => {
   const photoPaths = Object.keys(import.meta.glob("../../images/photos/*.jpg"));
   const trimPhotoPaths = photoPaths.map((photo) => photo.slice(20));
   const sortedPaths = trimPhotoPaths.sort((a, b) => {
@@ -20,9 +20,9 @@ export const getStaticPaths = (async ({ paginate }) => {
 const { page } = Astro.props;
 ---
 
-<Layout title="photo">
-  <h1>photo {page.currentPage}</h1>
-  <div class="grid grid-cols-3 gap-1">
+<Layout title="photos">
+  <h1>photos page:{page.currentPage}</h1>
+  <div class="grid grid-cols-3 grid-rows-3 gap-1 mt-3">
     {
       page.data.map(({ src }) => (
         <a href={`/photos/${src.slice(0, -4)}/`} class="aspect-square block">
@@ -34,7 +34,20 @@ const { page } = Astro.props;
       ))
     }
   </div>
-  {page.url.prev ? <a href={page.url.prev}>Previous</a> : null}
-  <br />
-  {page.url.next ? <a href={page.url.next}>Next</a> : null}
+  <div class="grid grid-cols-2 mt-3">
+    {
+      page.url.prev ? (
+        <a class="" href={page.url.prev}>
+          Previous
+        </a>
+      ) : null
+    }
+    {
+      page.url.next ? (
+        <a class="col-start-2 col-end-3 justify-self-end" href={page.url.next}>
+          Next
+        </a>
+      ) : null
+    }
+  </div>
 </Layout>
