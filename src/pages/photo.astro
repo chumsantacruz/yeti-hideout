@@ -1,4 +1,5 @@
 ---
+import type { GetStaticPaths } from "astro";
 import Layout from "../layouts/Layout.astro";
 import ImageFrame from "../modules/ImageFrame.astro";
 
@@ -9,6 +10,15 @@ const sortedPaths = trimPhotoPaths.sort((a, b) => {
   const current = +b.slice(6, -4)
   return prev - current
 })
+
+export const getStaticPaths = (async({paginate}) => {
+  return paginate(sortedPaths.map(path => ({photo: path})), {pageSize: 9});
+}) satisfies GetStaticPaths;
+
+const {page} = Astro.props
+
+console.log(page);
+
 ---
 
 <Layout title="photo">
