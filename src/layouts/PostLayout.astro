@@ -1,8 +1,7 @@
 ---
 import Layout from "./Layout.astro";
 import BackLink from "../components/BackLink.astro";
-import '../styles/post.scss'
-const {frontmatter} = Astro.props
+const { frontmatter } = Astro.props;
 ---
 
 <Layout title={frontmatter.title}>
@@ -13,3 +12,78 @@ const {frontmatter} = Astro.props
   </div>
   <BackLink />
 </Layout>
+
+<style lang="scss" is:global>
+  .markdown {
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      @apply font-semibold mb-3;
+    }
+
+    h1 {
+      @apply mb-8 text-2xl;
+    }
+
+    h2 {
+      @apply text-xl mt-6;
+    }
+
+    h3 {
+      @apply text-lg;
+    }
+
+    h4 {
+      @apply border-l-2 border-l-gray-600 pl-3 text-base;
+    }
+
+    p {
+      @apply my-3 text-base text-wrap;
+    }
+
+    ul {
+      list-style-type: revert;
+      @apply pl-5;
+    }
+
+    ul:not(li > *) {
+      @apply my-5;
+    }
+
+    hr {
+      @apply my-5 border-slate-300;
+    }
+
+    a {
+      @apply text-blue-600;
+    }
+
+    code:not(pre > *) {
+      @apply bg-slate-400 text-white;
+    }
+
+    blockquote {
+      @apply my-5 border border-slate-300 p-3 border-l-slate-700 border-l-2;
+    }
+
+    table {
+      @apply my-5 block table-auto border-collapse overflow-x-auto whitespace-nowrap text-sm sm:table;
+    }
+    th {
+      @apply border-b border-gray-600 py-5 px-2 bg-gray-200;
+    }
+    tbody {
+      @apply bg-gray-300;
+    }
+    td {
+      @apply border-b border-slate-700 p-3;
+    }
+
+    .expressive-code {
+      @apply my-5;
+    }
+  }
+</style>

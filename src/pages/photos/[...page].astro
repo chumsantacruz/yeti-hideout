@@ -2,17 +2,15 @@
 import type { GetStaticPaths } from "astro";
 import Layout from "../../layouts/Layout.astro";
 import ImageFrame from "../../modules/ImageFrame.astro";
+import { getCollection } from "astro:content";
 
-export const getStaticPaths = (({ paginate }) => {
-  const photoPaths = Object.keys(import.meta.glob("../../images/photos/*.jpg"));
-  const trimPhotoPaths = photoPaths.map((photo) => photo.slice(20));
-  const sortedPaths = trimPhotoPaths.sort((a, b) => {
-    const prev = +a.slice(6, -4);
-    const current = +b.slice(6, -4);
-    return prev - current;
-  });
+export const getStaticPaths = (async ({ paginate }) => {
+  const photos = await getCollection('photos')
+  const sortedPhotos = photos.sort((a, b) => {
+      return +a.slug.replace("photo-", "") - +b.slug.replace("photo-", "");
+    });
   return paginate(
-    sortedPaths.map((path) => ({ src: path })),
+    sortedPhotos,
     { pageSize: 9 }
   );
 }) satisfies GetStaticPaths;
@@ -24,10 +22,10 @@ const { page } = Astro.props;
   <h1>photos page:{page.currentPage}</h1>
   <div class="grid grid-cols-3 grid-rows-3 gap-1 mt-3">
     {
-      page.data.map(({ src }) => (
-        <a href={`/photos/${src.slice(0, -4)}/`} class="aspect-square block">
+      page.data.map(({ slug }) => (
+        <a href={`/photos/${slug}/`} class="aspect-square block">
           <ImageFrame
-            srcPaths={[`photos/${src}`]}
+            srcPaths={[`photos/${slug}.jpg`]}
             classNames="h-full object-cover"
           />
         </a>

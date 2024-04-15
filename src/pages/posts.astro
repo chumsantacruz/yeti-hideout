@@ -1,14 +1,18 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import { getCollection } from "astro:content";
+import ImageFrame from "../modules/ImageFrame.astro";
 
 const posts = await getCollection('posts')
 ---
 
 <Layout title="posts">
-  <ol class="list-decimal list-inside">
+  <div>
     {posts.map(post => (
-      <li><a href={`/posts/${post.slug}/`} data-astro-prefetch>{post.data.title}</a></li>
+      <article>
+        <ImageFrame srcPaths={[`posts/${post.data.img}.jpg`]}/>
+        <a href={`/posts/${post.slug}/`} data-astro-prefetch>{post.data.title}</a>
+      </article>
     ))}
-  </ol>
+  </div>
 </Layout>
