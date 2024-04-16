@@ -7,7 +7,6 @@ const { frontmatter } = Astro.props;
 
 <Layout title={frontmatter.img}>
   <div class="grid gap-5">
-    <h1>{frontmatter.img}</h1>
     <div class="grid w-fit mx-auto place-items-center">
       <ImageFrame srcPaths={[`photos/${frontmatter.img}.jpg`]} />
     </div>

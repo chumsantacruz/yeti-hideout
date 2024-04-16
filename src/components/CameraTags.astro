@@ -1,0 +1,13 @@
+---
+import { getCollection } from "astro:content";
+
+const photos = await getCollection("photos");
+const uniqueCameras = [...new Set(photos.map((photo) => photo.data.camera))];
+---
+
+<div class="bg-gray-50 rounded shadow-sm p-5">
+  <p class="mb-4 text-lg">Camera 📷</p>
+  <div class="flex gap-2 flex-wrap">
+    {uniqueCameras.map((camera) => <a class="block bg-gray-200 rounded-full px-3 hover:opacity-70" href={`/photos/${camera}/`}>{camera}</a>)}
+  </div>
+</div>

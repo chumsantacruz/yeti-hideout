@@ -1,6 +1,6 @@
 ---
 import { getCollection } from "astro:content";
-import PhotoBaseLayout from "../../layouts/PhotoBaseLayout.astro";
+import PhotoBaseLayout from "../../layouts/PhotoLayout.astro";
 
 export async function getStaticPaths() {
   const photoEntries = await getCollection('photos')

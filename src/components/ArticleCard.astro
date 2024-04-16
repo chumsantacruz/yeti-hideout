@@ -1,0 +1,22 @@
+---
+const {post} = Astro.props
+---
+
+<article class="bg-gray-200 p-3 shadow">
+  <a
+    class="text-blue-400 text-lg mb-2 block"
+    href={`/posts/${post.slug}/`}
+    data-astro-prefetch
+  >
+    {post.data.title}
+  </a>
+  <p class="mb-2">{post.data.description}</p>
+  <div class="grid grid-cols-post-bottom gap-3">
+    <p class="text-sm">{post.data.pubDate.toLocaleDateString("ja-JP")}</p>
+    <div class="flex flex-wrap gap-2">
+      {post.data.tag.map((tag: string) =>(
+        <a class="bg-gray-100 text-sm px-3 py-1 rounded hover:opacity-70" href={`/posts/tags/${tag}/`}>{tag}</a>
+      ))}
+    </div>
+  </div>
+</article>

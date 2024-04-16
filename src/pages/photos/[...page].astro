@@ -1,51 +1,19 @@
 ---
 import type { GetStaticPaths } from "astro";
-import Layout from "../../layouts/Layout.astro";
-import ImageFrame from "../../modules/ImageFrame.astro";
 import { getCollection } from "astro:content";
+import PhotosLayout from "../../layouts/PhotosLayout.astro";
 
 export const getStaticPaths = (async ({ paginate }) => {
-  const photos = await getCollection('photos')
+  const photos = await getCollection("photos");
   const sortedPhotos = photos.sort((a, b) => {
-      return +a.slug.replace("photo-", "") - +b.slug.replace("photo-", "");
-    });
-  return paginate(
-    sortedPhotos,
-    { pageSize: 9 }
-  );
+    return +a.slug.replace("photo-", "") - +b.slug.replace("photo-", "");
+  });
+  return paginate(sortedPhotos, { pageSize: 9 });
 }) satisfies GetStaticPaths;
 
 const { page } = Astro.props;
+const title = "Photos";
 ---
 
-<Layout title="photos">
-  <h1>photos page:{page.currentPage}</h1>
-  <div class="grid grid-cols-3 grid-rows-3 gap-1 mt-3">
-    {
-      page.data.map(({ slug }) => (
-        <a href={`/photos/${slug}/`} class="aspect-square block">
-          <ImageFrame
-            srcPaths={[`photos/${slug}.jpg`]}
-            classNames="h-full object-cover"
-          />
-        </a>
-      ))
-    }
-  </div>
-  <div class="grid grid-cols-2 mt-3">
-    {
-      page.url.prev ? (
-        <a class="" href={page.url.prev}>
-          Previous
-        </a>
-      ) : null
-    }
-    {
-      page.url.next ? (
-        <a class="col-start-2 col-end-3 justify-self-end" href={page.url.next}>
-          Next
-        </a>
-      ) : null
-    }
-  </div>
-</Layout>
+<PhotosLayout title={title} page={page}>
+</PhotosLayout>

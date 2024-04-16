@@ -1,9 +1,7 @@
 ---
 import type { GetStaticPaths } from "astro";
-import Layout from "../../../layouts/Layout.astro";
 import { getCollection } from "astro:content";
-import ImageFrame from "../../../modules/ImageFrame.astro";
-import BackLink from "../../../components/BackLink.astro";
+import PhotosLayout from "../../../layouts/PhotosLayout.astro";
 
 export const getStaticPaths = (async ({ paginate }) => {
   const photos = await getCollection("photos");
@@ -13,7 +11,7 @@ export const getStaticPaths = (async ({ paginate }) => {
       photo.data.camera.includes(camera)
     );
     const sortedFilterdPhoto = filterdPhotos.sort((a, b) => {
-      return +a.slug.replace("photo-", "") - +b.slug.replace("photo-", "");
+      return Number(a.slug.replace("photo-", "")) - Number(b.slug.replace("photo-", ""));
     });
     return paginate(sortedFilterdPhoto, {
       params: { camera },
@@ -26,34 +24,6 @@ const { page } = Astro.props;
 const params = Astro.params;
 ---
 
-<Layout title="test">
-  <h1>{params.camera} page:{page.currentPage}</h1>
-  <div class="grid grid-cols-3 grid-rows-3 gap-1 mt-3">
-    {
-      page.data.map((photo) => (
-        <a href={`/photos/${photo.slug}/`} class="aspect-square block">
-          <ImageFrame
-            srcPaths={[`photos/${photo.slug}.jpg`]}
-            classNames="h-full object-cover"
-          />
-        </a>
-      ))
-    }
-  </div>
-  <div class="grid grid-cols-2 mt-3">
-    {
-      page.url.prev ? (
-        <a class="" href={page.url.prev}>
-          Previous
-        </a>
-      ) : null
-    }
-    {
-      page.url.next ? (
-        <a class="col-start-2 col-end-3 justify-self-end" href={page.url.next}>
-          Next
-        </a>
-      ) : null
-    }
-  </div>
-</Layout>
+<PhotosLayout title={params.camera} page={page}>
+  <a href="/photos">Back to all photos</a>
+</PhotosLayout>

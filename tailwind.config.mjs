@@ -5,6 +5,7 @@ export default {
 		extend: {
       gridTemplateColumns: {
         'header': '2rem auto',
+        'post-bottom': 'max-content auto'
       },
       gridTemplateRows: {
         'nav': '3.5rem auto',

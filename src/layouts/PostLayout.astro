@@ -4,7 +4,7 @@ import BackLink from "../components/BackLink.astro";
 const { frontmatter } = Astro.props;
 ---
 
-<Layout title={frontmatter.title}>
+<Layout title={frontmatter.title} h1={false}>
   <div class="markdown">
     <h1>{frontmatter.title}</h1>
     <p>日付: {frontmatter.pubDate.toLocaleDateString("ja-JP")}</p>
@@ -84,6 +84,9 @@ const { frontmatter } = Astro.props;
 
     .expressive-code {
       @apply my-5;
+      pre {
+        overflow-x: scroll;
+      }
     }
   }
 </style>
