@@ -1,6 +1,7 @@
 ---
 import type { GetStaticPaths } from "astro";
 import { getCollection } from "astro:content";
+import { sortPhotos } from "../../../utils/sortPhotos";
 import PhotosLayout from "../../../layouts/PhotosLayout.astro";
 
 export const getStaticPaths = (async ({ paginate }) => {
@@ -10,9 +11,7 @@ export const getStaticPaths = (async ({ paginate }) => {
     const filterdPhotos = photos.filter((photo) =>
       photo.data.camera.includes(camera)
     );
-    const sortedFilterdPhoto = filterdPhotos.sort((a, b) => {
-      return Number(a.slug.replace("photo-", "")) - Number(b.slug.replace("photo-", ""));
-    });
+    const sortedFilterdPhoto = sortPhotos(filterdPhotos)
     return paginate(sortedFilterdPhoto, {
       params: { camera },
       pageSize: 9,

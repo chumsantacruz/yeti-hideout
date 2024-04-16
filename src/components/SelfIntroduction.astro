@@ -1,0 +1,15 @@
+---
+import { Image } from "astro:assets"
+import YetiLogo from "../images/yeti.png";
+import WhitePanel from "./WhitePanel.astro";
+---
+
+<WhitePanel>
+  <h1 class="text-3xl mb-4">Home</h1>
+  <div class="md:flex gap-7">
+    <div class="w-24 rounded-full overflow-hidden bg-sky-950 mx-auto md:mx-0">
+      <Image src={YetiLogo} alt="logo" />
+    </div>
+    <p>Hello, my name is chumsantacruz ! I am the caretaker of this planet.</p>
+  </div>
+</WhitePanel>
