@@ -7,7 +7,7 @@ import PostTags from "../components/PostTags.astro";
 import SideNav from "../components/SideNav.astro";
 interface Props {
   title: string;
-  h1?: boolean
+  h1?: boolean;
 }
 
 const { title, h1 = true } = Astro.props;
@@ -30,7 +30,13 @@ const { title, h1 = true } = Astro.props;
       <div class="hidden shrink-0 w-64 sticky top-24 md:block">
         <div class="grid auto-rows-max gap-4">
           <SideNav />
-          {Astro.url.pathname.startsWith('/photos') ? <CameraTags /> : <PostTags />}
+          {
+            Astro.url.pathname.startsWith("/photos") ? (
+              <CameraTags />
+            ) : (
+              <PostTags />
+            )
+          }
         </div>
       </div>
       <div class="grow">

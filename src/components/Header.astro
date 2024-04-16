@@ -3,7 +3,7 @@
 ---
 
 <header
-  class="sticky shadow top-0 z-50 w-full bg-slate-50 h-16 grid place-items-center grid-cols-header px-5 md:grid-cols-1"
+  class="sticky shadow top-0 z-40 w-full bg-slate-50 h-16 grid place-items-center grid-cols-header px-5 md:grid-cols-1"
 >
   <button data-button="open" class="w-full h-7 grid place-items-center md:hidden">
     <span class="w-full block bg-black h-0.5"></span>
@@ -38,17 +38,35 @@
 
 <script>
   document.addEventListener("astro:page-load", () => {
+    const body = document.querySelector('body')
     const btn_open = document.querySelector('[data-button="open"]');
     const btn_close = document.querySelector('[data-button="close"]');
     const nav = document.querySelector("[data-nav]");
     btn_open?.addEventListener("click", () => {
       nav?.classList.replace("-translate-x-full", "translate-x-0");
+      body?.classList.add('overflow-hidden')
       if (nav?.classList.contains("invisible")) {
         nav?.classList.remove("invisible");
       }
     });
     btn_close?.addEventListener("click", () => {
       nav?.classList.replace("translate-x-0", "-translate-x-full");
+      body?.classList.remove('overflow-hidden')
     });
   });
 </script>
+
+<style lang="scss">
+  body{
+    header::before {
+        content: '';
+        @apply bg-gray-500 opacity-0 top-0 w-screen h-screen absolute invisible transition-opacity;
+      }
+
+    &.overflow-hidden {
+      header::before {
+        @apply opacity-80 visible;
+      }
+    }
+  }
+</style>
