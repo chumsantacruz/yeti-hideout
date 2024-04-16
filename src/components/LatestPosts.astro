@@ -11,7 +11,7 @@ const sortedPosts = posts.sort((a, b) => {
 
 <WhitePanel>
   <h2 class="text-3xl mb-4">Latest Posts</h2>
-  <div class="grid md:grid-cols-2 gap-3 mb-4">
+  <div class="grid gap-3 mb-4">
     {sortedPosts.map((post) => <ArticleCard post={post} />)}
   </div>
   <a href="/posts/">and more...</a>
