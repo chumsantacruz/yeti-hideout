@@ -3,6 +3,8 @@ import { getCollection } from "astro:content";
 import WhitePanel from "./WhitePanel.astro";
 import PhotoFrame from "./PhotoFrame.astro";
 
+export const prerender = false
+
 const photos = await getCollection('photos')
 const photoSlugs = photos.map(photo => photo.slug)
 
