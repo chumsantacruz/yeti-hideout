@@ -1,72 +1,52 @@
 ---
-
+const url = Astro.url.pathname;
 ---
 
 <header
-  class="sticky shadow top-0 z-40 w-full bg-slate-50 h-16 grid place-items-center grid-cols-header px-5 md:grid-cols-1"
+  class="sticky shadow top-0 z-40 w-full bg-slate-50 h-12 px-5 grid place-items-center"
 >
-  <button data-button="open" class="w-full h-7 grid place-items-center md:hidden">
-    <span class="w-full block bg-black h-0.5"></span>
-    <span class="w-full block bg-black h-0.5"></span>
-    <span class="w-full block bg-black h-0.5"></span>
-  </button>
-  <a class="block text-3xl -ml-6 text-black font-bold text-center" href="/">Yeti's Planet</a>
-  <nav
-    data-nav
-    class="transition-transform -translate-x-full px-5 pt-2 absolute grid grid-rows-nav top-0 bg-white left-0 z-10 w-80 h-120"
+  <button
+    data-button="open"
+    class="place-self-start self-center md:hidden text-lg"
   >
-    <div class="h-14">
-      <button data-button="close" class="w-14 aspect-square">
-        <span class="block w-12 h-0.5 bg-black rotate-45 translate-y-0.5"
-        ></span>
-        <span class="block w-12 h-0.5 bg-black -rotate-45"></span>
-      </button>
-    </div>
-    <ul class="w-full self-center grid auto-rows-max gap-8 text-3xl pl-16">
-      <li>
-        <a data-link href="/" data-astro-prefetch>Home</a>
-      </li>
-      <li>
-        <a data-link href="/posts/" data-astro-prefetch>Posts</a>
-      </li>
-      <li>
-        <a data-link href="/photos/" data-astro-prefetch>Photos</a>
-      </li>
-    </ul>
-  </nav>
+    {
+      url === "/"
+        ? `Home 🏠`
+        : url.startsWith("/posts")
+          ? "Posts 📝"
+          : url.startsWith("/photos")
+            ? "Photos 📸"
+            : null
+    }
+  </button>
+
+  <dialog class="absolute top-12 left-2 bg-white m-0 shadow-md">
+    <nav>
+      <ul class="w-full grid auto-rows-max gap-2 p-5">
+        <li>
+          <a data-link href="/" data-astro-prefetch>Home 🏠</a>
+        </li>
+        <li>
+          <a data-link href="/posts/" data-astro-prefetch>Posts 📝</a>
+        </li>
+        <li>
+          <a data-link href="/photos/" data-astro-prefetch>Photos 📸</a>
+        </li>
+      </ul>
+    </nav>
+  </dialog>
 </header>
 
 <script>
   document.addEventListener("astro:page-load", () => {
-    const body = document.querySelector('body')
-    const btn_open = document.querySelector('[data-button="open"]');
-    const btn_close = document.querySelector('[data-button="close"]');
-    const nav = document.querySelector("[data-nav]");
-    btn_open?.addEventListener("click", () => {
-      nav?.classList.replace("-translate-x-full", "translate-x-0");
-      body?.classList.add('overflow-hidden')
-      if (nav?.classList.contains("invisible")) {
-        nav?.classList.remove("invisible");
+    const dialog = document.querySelector("dialog") as HTMLDialogElement;
+    const dialog_open = document.querySelector('[data-button="open"]');
+    dialog_open?.addEventListener("click", () => {
+      if (dialog.hasAttribute("open")) {
+        dialog.close();
+      } else {
+        dialog.show();
       }
-    });
-    btn_close?.addEventListener("click", () => {
-      nav?.classList.replace("translate-x-0", "-translate-x-full");
-      body?.classList.remove('overflow-hidden')
     });
   });
 </script>
-
-<style lang="scss">
-  body{
-    header::before {
-        content: '';
-        @apply bg-gray-500 opacity-0 top-0 w-screen h-screen absolute invisible transition-opacity;
-      }
-
-    &.overflow-hidden {
-      header::before {
-        @apply opacity-80 visible;
-      }
-    }
-  }
-</style>

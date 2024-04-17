@@ -3,9 +3,12 @@ import Layout from "../layouts/Layout.astro";
 import SelfIntroduction from "../components/SelfIntroduction.astro";
 import LatestPosts from "../components/LatestPosts.astro";
 import RandomPhotos from "../components/RandomPhotos.astro";
+
+const title = "Yeti's Planet"
 ---
 
-<Layout title="Yeti's Planet" h1={false}>
+<Layout title={title} h1={false}>
+  <h1 class="mb-3 text-3xl">Home</h1>
   <div class="grid gap-4">
     <SelfIntroduction />
     <LatestPosts />

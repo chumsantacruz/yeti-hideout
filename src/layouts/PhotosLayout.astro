@@ -1,25 +1,54 @@
 ---
+import { getAllPhotos } from "../utils/getAllPhotos";
 import Layout from "./Layout.astro";
 import Pagination from "../components/Pagination.astro";
 import PhotoFrame from "../components/PhotoFrame.astro";
+import WhitePanel from "../components/WhitePanel.astro";
 
-const {title, page} = Astro.props
+const photos = await getAllPhotos();
+const uniqueCameras = [...new Set(photos.map((photo) => photo.data.camera))];
+
+const url = decodeURI(Astro.url.pathname)
+
+const { title, page } = Astro.props;
 ---
 
 <Layout title={title}>
-  <p>page: {page.currentPage}</p>
+  <p class="my-3">page: {page.currentPage}</p>
   <div class="grid grid-cols-3 grid-rows-3 md:grid-rows-none gap-1 mt-3">
-    {page.data.map((photo: {
-      id: string;
-      slug: string;
-      body: string;
-      collection: string;
-      data: {
-          img: string;
-          camera: string;
-          film: string;
-      }}) => <PhotoFrame slug={photo.slug} />)}
+    {
+      page.data.map(
+        (photo: {
+          id: string;
+          slug: string;
+          body: string;
+          collection: string;
+          data: {
+            img: string;
+            camera: string;
+            film: string;
+          };
+        }) => <PhotoFrame slug={photo.slug} />
+      )
+    }
   </div>
-  <Pagination page={page}/>
+  <Pagination page={page} />
+  <div class="md:hidden">
+    <WhitePanel>
+      <p class="mb-3">Camera 📸</p>
+      <div class="flex gap-2 flex-wrap">
+        {
+          uniqueCameras.map((camera) => (
+            <a
+              class={`block rounded-full px-3 hover:opacity-70 ${url.includes(camera) ? 'bg-gray-400' : 'bg-gray-200'}`}
+              href={`/photos/${camera}/`}
+            >
+              {camera}
+            </a>
+          ))
+        }
+      </div>
+    </WhitePanel>
+  </div>
   <slot />
 </Layout>

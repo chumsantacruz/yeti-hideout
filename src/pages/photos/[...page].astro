@@ -9,7 +9,7 @@ export const getStaticPaths = (async ({ paginate }) => {
 }) satisfies GetStaticPaths;
 
 const { page } = Astro.props;
-const title = "Photos";
+const title = "All Photos";
 ---
 
 <PhotosLayout title={title} page={page}>

@@ -1,13 +1,15 @@
 ---
-import { getCollection } from "astro:content";
+import { getAllPhotos } from "../utils/getAllPhotos";
 
-const photos = await getCollection("photos");
+const photos = await getAllPhotos();
 const uniqueCameras = [...new Set(photos.map((photo) => photo.data.camera))];
+
+const url = decodeURI(Astro.url.pathname)
 ---
 
 <div class="bg-gray-50 rounded shadow-sm p-5">
   <p class="mb-4 text-lg">Camera 📷</p>
   <div class="flex gap-2 flex-wrap">
-    {uniqueCameras.map((camera) => <a class="block bg-gray-200 rounded-full px-3 hover:opacity-70" href={`/photos/${camera}/`}>{camera}</a>)}
+    {uniqueCameras.map((camera) => <a class={`block rounded-full px-3 hover:opacity-70 ${url.includes(camera) ? 'bg-gray-400' : 'bg-gray-200'}`} href={`/photos/${camera}/`}>{camera}</a>)}
   </div>
 </div>
