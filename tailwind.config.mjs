@@ -13,6 +13,9 @@ export default {
       },
       height: {
         '120': '30rem'
+      },
+      rotate: {
+        '135': '135deg'
       }
     },
 	},

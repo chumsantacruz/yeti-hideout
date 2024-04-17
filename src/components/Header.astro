@@ -7,22 +7,27 @@ const url = Astro.url.pathname;
 >
   <button
     data-button="open"
-    class="place-self-start self-center md:hidden text-lg"
-  >
-    {
-      url === "/"
-        ? `Home 🏠`
-        : url.startsWith("/posts")
-          ? "Posts 📝"
-          : url.startsWith("/photos")
-            ? "Photos 📸"
-            : null
-    }
+    class="place-self-start self-center md:hidden text-lg flex gap-2 place-items-center"
+    ><span>
+      {
+        url === "/"
+          ? `Home 🏠`
+          : url.startsWith("/posts")
+            ? "Posts 📝"
+            : url.startsWith("/photos")
+              ? "Photos 📸"
+              : null
+      }
+    </span>
+    <span
+      data-allow
+      class="inline-block w-2 border-gray-600 -rotate-45 border-l-2 border-b-2 aspect-square origin-center -mt-1"
+    ></span>
   </button>
 
   <dialog class="absolute top-12 left-2 bg-white m-0 shadow-md">
     <nav>
-      <ul class="w-full grid auto-rows-max gap-2 p-5">
+      <ul class="w-full grid auto-rows-max gap-2 p-5 text-lg">
         <li>
           <a data-link href="/" data-astro-prefetch>Home 🏠</a>
         </li>
@@ -40,12 +45,17 @@ const url = Astro.url.pathname;
 <script>
   document.addEventListener("astro:page-load", () => {
     const dialog = document.querySelector("dialog") as HTMLDialogElement;
-    const dialog_open = document.querySelector('[data-button="open"]');
-    dialog_open?.addEventListener("click", () => {
+    const dialog_toggle = document.querySelector('[data-button="open"]');
+    const allow = document.querySelector('[data-allow]')
+    dialog_toggle?.addEventListener("click", () => {
       if (dialog.hasAttribute("open")) {
         dialog.close();
+        allow?.classList.replace('rotate-135', '-rotate-45')
+        allow?.classList.replace('-mb-1', '-mt-1')
       } else {
         dialog.show();
+        allow?.classList.replace('-rotate-45', 'rotate-135')
+        allow?.classList.replace('-mt-1', '-mb-1')
       }
     });
   });
