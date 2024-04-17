@@ -1,18 +1,16 @@
 ---
 import type { GetStaticPaths } from "astro";
-import { getCollection } from "astro:content";
-import { sortPhotos } from "../../../utils/sortPhotos";
+import { getAllPhotos } from "../../../utils/getAllPhotos";
 import PhotosLayout from "../../../layouts/PhotosLayout.astro";
 
 export const getStaticPaths = (async ({ paginate }) => {
-  const photos = await getCollection("photos");
+  const photos = await getAllPhotos()
   const uniqueCameras = [...new Set(photos.map((photo) => photo.data.camera))];
   return uniqueCameras.flatMap((camera) => {
     const filterdPhotos = photos.filter((photo) =>
       photo.data.camera.includes(camera)
     );
-    const sortedFilterdPhoto = sortPhotos(filterdPhotos)
-    return paginate(sortedFilterdPhoto, {
+    return paginate(filterdPhotos, {
       params: { camera },
       pageSize: 9,
     });
@@ -24,5 +22,5 @@ const params = Astro.params;
 ---
 
 <PhotosLayout title={params.camera} page={page}>
-  <a href="/photos">Back to all photos</a>
+  <a href="/photos" class="block mt-3">Back to all photos</a>
 </PhotosLayout>

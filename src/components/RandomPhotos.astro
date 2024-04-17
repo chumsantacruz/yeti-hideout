@@ -3,8 +3,6 @@ import { getCollection } from "astro:content";
 import WhitePanel from "./WhitePanel.astro";
 import PhotoFrame from "./PhotoFrame.astro";
 
-export const prerender = false
-
 const photos = await getCollection('photos')
 const photoSlugs = photos.map(photo => photo.slug)
 
@@ -18,11 +16,17 @@ for(let i = 0; i < 9; i++) {
   randomPhotos.push(...photoSlugs.splice(getRandomIndex(photoSlugs.length), 1))
 }
 
+const {allPhotos = photos} = Astro.props
+
 ---
-<WhitePanel>
+<WhitePanel date-photos={allPhotos}>
   <h2 class="text-3xl mb-4">Photos</h2>
   <div class="grid grid-cols-3 grid-rows-3 md:grid-rows-none gap-1 mb-4">
     {randomPhotos.map((photo) => <PhotoFrame slug={photo} />)}
   </div>
   <a href="/photos/">and more...</a>
 </WhitePanel>
+
+<script>
+  console.log('hello')
+</script>

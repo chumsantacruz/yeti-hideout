@@ -1,14 +1,11 @@
 ---
 import type { GetStaticPaths } from "astro";
-import { getCollection } from "astro:content";
+import { getAllPhotos } from "../../utils/getAllPhotos";
 import PhotosLayout from "../../layouts/PhotosLayout.astro";
 
 export const getStaticPaths = (async ({ paginate }) => {
-  const photos = await getCollection("photos");
-  const sortedPhotos = photos.sort((a, b) => {
-    return +a.slug.replace("photo-", "") - +b.slug.replace("photo-", "");
-  });
-  return paginate(sortedPhotos, { pageSize: 9 });
+  const photos = await getAllPhotos()
+  return paginate(photos, { pageSize: 9 });
 }) satisfies GetStaticPaths;
 
 const { page } = Astro.props;

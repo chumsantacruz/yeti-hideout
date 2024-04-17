@@ -1,9 +1,9 @@
 ---
-import { getCollection } from "astro:content";
+import { getAllPhotos } from "../../utils/getAllPhotos";
 import PhotoBaseLayout from "../../layouts/PhotoLayout.astro";
 
 export async function getStaticPaths() {
-  const photoEntries = await getCollection('photos')
+  const photoEntries = await getAllPhotos()
   return photoEntries.map(entry => ({
     params: {slug: entry.slug}, props: {entry}
   }))

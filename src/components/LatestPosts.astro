@@ -1,18 +1,16 @@
 ---
-import { getCollection } from "astro:content";
+import {getAllPosts}  from "../utils/getAllPosts.ts"
 import WhitePanel from "./WhitePanel.astro";
 import ArticleCard from "./ArticleCard.astro";
 
-const posts = await getCollection("posts");
-const sortedPosts = posts.sort((a, b) => {
-  return a.data.pubDate < b.data.pubDate ? 1 : -1;
-});
+const posts = await getAllPosts()
+const latestPosts = posts.slice(0, 4)
 ---
 
 <WhitePanel>
   <h2 class="text-3xl mb-4">Latest Posts</h2>
-  <div class="grid gap-3 mb-4">
-    {sortedPosts.map((post) => <ArticleCard post={post} />)}
+  <div class="grid gap-3 mb-4 xl:grid-cols-2">
+    {latestPosts.map((post) => <ArticleCard post={post} />)}
   </div>
   <a href="/posts/">and more...</a>
 </WhitePanel>

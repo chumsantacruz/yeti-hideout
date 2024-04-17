@@ -2,8 +2,6 @@
 import { ViewTransitions } from "astro:transitions";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
-import CameraTags from "../components/CameraTags.astro";
-import PostTags from "../components/PostTags.astro";
 import SideNav from "../components/SideNav.astro";
 interface Props {
   title: string;
@@ -27,23 +25,15 @@ const { title, h1 = true } = Astro.props;
   <body class="bg-gray-100 min-h-lvh grid grid-rows-layout">
     <Header transition:persist />
     <main class="container w-svw mx-auto px-5 py-8 md:flex gap-6 items-start">
-      <div class="hidden shrink-0 w-64 sticky top-24 md:block">
-        <div class="grid auto-rows-max gap-4">
-          <SideNav />
-          {
-            Astro.url.pathname.startsWith("/photos") ? (
-              <CameraTags />
-            ) : (
-              <PostTags />
-            )
-          }
-        </div>
-      </div>
+      <nav class="hidden shrink-0 w-64 sticky top-24 md:block">
+        <SideNav />
+      </nav>
       <div class="grow">
         {h1 ? <h1 class="mb-3 text-3xl">{title}</h1> : null}
         <slot />
       </div>
     </main>
+
     <Footer />
   </body>
 </html>

@@ -1,15 +1,12 @@
 ---
 import type { GetStaticPaths } from "astro";
-import { getCollection } from "astro:content";
+import {getAllPosts}  from "../../utils/getAllPosts.ts"
 import Layout from "../../layouts/Layout.astro";
 import ArticleCard from "../../components/ArticleCard.astro";
 
 export const getStaticPaths = (async({paginate}) => {
-  const posts = await getCollection('posts')
-  const sortedPosts = posts.sort((a, b) => {
-    return a.data.pubDate < b.data.pubDate ? 1 : -1
-  })
-  return paginate(sortedPosts, {pageSize: 20});
+  const posts = await getAllPosts()
+  return paginate(posts, {pageSize: 20});
 }) satisfies GetStaticPaths;
 
 const {page} = Astro.props
@@ -17,7 +14,7 @@ const title = 'Posts'
 ---
 
 <Layout title={title}>
-  <div class="grid gap-3 md:grid-cols-2">
+  <div class="grid gap-3 xl:grid-cols-2">
     {
       page.data.map((post) => (
         <ArticleCard post={post}/>
