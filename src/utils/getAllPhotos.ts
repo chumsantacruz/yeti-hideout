@@ -5,6 +5,6 @@ export async function getAllPhotos() {
   return allPhotos.sort(
     (a, b) =>
       Number(b.slug.replace("photo-", "")) -
-      Number(a.slug.replace("photo-", ""))
+      Number(a.slug.replace("photo-", "")),
   );
 }

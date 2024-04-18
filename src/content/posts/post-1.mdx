@@ -2,7 +2,7 @@
 title: "落書き用落書き用落書き用落書き用落書き用落書き用落書き用"
 description: "投稿についての簡単な概要投稿についての簡単な概要投稿についての簡単な概要投稿についての簡単な概要投稿についての簡単な概要"
 pubDate: 2024-04-11
-tag: ['javascript', 'html', 'css', 'Astro', 'React']
+tag: ["javascript", "html", "css", "Astro", "React"]
 ---
 
 Astroを使って作ってみたよ
@@ -21,12 +21,12 @@ Astroを使って作ってみたよ
 
 > どうもこんにちは。私の名前はパンツマンです。正義のヒーローですので、通報しないでください。
 
-***
+---
 
 #### codeblockはこんな感じです
 
 ```js title="my-test-file.js"
-console.log('hello world')
+console.log("hello world");
 document.addEventListener("astro:page-load", () => {
   const btn_open = document.querySelector('[data-button="open"]');
   const btn_close = document.querySelector('[data-button="close"]');
@@ -60,11 +60,11 @@ Write-Output "This one has a title!"
 
 ```js title="line-markers.js" del={2} ins={3-4} {6}
 function demo() {
-  console.log('this line is marked as deleted')
+  console.log("this line is marked as deleted");
   // This line and the next one are marked as inserted
-  console.log('this is the second inserted line')
+  console.log("this is the second inserted line");
 
-  return 'this line uses the neutral default marker type'
+  return "this line uses the neutral default marker type";
 }
 ```
 
@@ -73,7 +73,7 @@ function demo() {
 ここに`code`を使ってみました`こんにちは`
 
 | Left align | Right align | Center align |
-|:-----------|------------:|:------------:|
+| :--------- | ----------: | :----------: |
 | This       |        This |     This     |
 | column     |      column |    column    |
 | will       |        will |     will     |
