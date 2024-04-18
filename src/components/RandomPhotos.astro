@@ -3,22 +3,22 @@ import { getCollection } from "astro:content";
 import WhitePanel from "./WhitePanel.astro";
 import PhotoFrame from "./PhotoFrame.astro";
 
-const photos = await getCollection('photos')
-const photoSlugs = photos.map(photo => photo.slug)
+const photos = await getCollection("photos");
+const photoSlugs = photos.map((photo) => photo.slug);
 
 function getRandomIndex(max: number) {
-  return Math.floor(Math.random() * max)
+  return Math.floor(Math.random() * max);
 }
 
-let randomPhotos = []
+let randomPhotos = [];
 
-for(let i = 0; i < 9; i++) {
-  randomPhotos.push(...photoSlugs.splice(getRandomIndex(photoSlugs.length), 1))
+for (let i = 0; i < 9; i++) {
+  randomPhotos.push(...photoSlugs.splice(getRandomIndex(photoSlugs.length), 1));
 }
 
-const {allPhotos = photos} = Astro.props
-
+const { allPhotos = photos } = Astro.props;
 ---
+
 <WhitePanel date-photos={allPhotos}>
   <h2 class="text-3xl mb-4">Photos</h2>
   <div class="grid grid-cols-3 grid-rows-3 md:grid-rows-none gap-1 mb-4">
@@ -26,7 +26,3 @@ const {allPhotos = photos} = Astro.props
   </div>
   <a href="/photos/">and more...</a>
 </WhitePanel>
-
-<script>
-  console.log('hello')
-</script>

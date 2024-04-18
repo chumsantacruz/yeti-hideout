@@ -1,0 +1,9 @@
+---
+import { Image } from "astro:assets";
+
+const { width = "w-full", src, alt } = Astro.props;
+---
+
+<div class={`mx-auto my-3 ${width === "w-full" ? width : `w-[${width}]`}`}>
+  <Image src={src} alt={alt} />
+</div>

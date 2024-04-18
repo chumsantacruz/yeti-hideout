@@ -1,82 +1,54 @@
 ---
-title: "落書き用落書き用落書き用落書き用落書き用落書き用落書き用"
-description: "投稿についての簡単な概要投稿についての簡単な概要投稿についての簡単な概要投稿についての簡単な概要投稿についての簡単な概要"
-pubDate: 2024-04-11
-tag: ["javascript", "html", "css", "Astro", "React"]
+title: "個人ブログを作った"
+description: "Astroを使って個人ブログを作ってみました"
+pubDate: 2024-04-18
+tag: ["blog", "Astro"]
 ---
 
-Astroを使って作ってみたよ
+import MDXImageFrame from "../../components/MDXImageFrame.astro";
+import photo from "../../images/yeti.png";
 
-## とりあえず、自分のサイトを作ってみる
+学習したことをアウトプットする場を作ろうと思い、Astroを使って個人ブログを作ってみました。
 
-いまのところ、**サイト内容**は
+## ブログコンテンツ
 
-- 技術記事（書けるか分からんけど）
-- ブログ的な
-- フィルムで撮った写真
-  - カメラ、フィルムでタグ付け
-    - aaa
+いまのところ、このブログのコンテンツとしては
 
-### パンツマン
+- 記事投稿
+- 趣味のフィルム写真
 
-> どうもこんにちは。私の名前はパンツマンです。正義のヒーローですので、通報しないでください。
+の二つです。
 
----
+記事投稿に関しては、学習したことをアウトプットするために活用する予定です。
 
-#### codeblockはこんな感じです
+写真の方は、自分の趣味がフィルムカメラで写真を撮ることなので、撮影した写真のなかからよさげな写真を載せようと思っております。
 
-```js title="my-test-file.js"
-console.log("hello world");
-document.addEventListener("astro:page-load", () => {
-  const btn_open = document.querySelector('[data-button="open"]');
-  const btn_close = document.querySelector('[data-button="close"]');
-  const nav = document.querySelector("[data-nav]");
-  btn_open?.addEventListener("click", () => {
-    nav?.classList.replace("-translate-x-full", "translate-x-0");
-    if (nav?.classList.contains("invisible")) {
-      nav?.classList.remove("invisible");
-    }
-  });
-  btn_close?.addEventListener("click", () => {
-    nav?.classList.replace("translate-x-0", "-translate-x-full");
-  });
-});
-```
+## 使用しているツール・サービス
 
-```powershell title="PowerShell terminal example"
-Write-Output "This one has a title!"
-```
+このブログは以下のようなツール・サービスを使用して作成しています。
 
-```js {1, 4, 7-8}
-// Line 1 - targeted by line number
-// Line 2
-// Line 3
-// Line 4 - targeted by line number
-// Line 5
-// Line 6
-// Line 7 - targeted by range "7-8"
-// Line 8 - targeted by range "7-8"
-```
+- ウェブフレームワーク：Astro
+- CSS：Tailwind CSS
+- JS：TypeScript
+- 記事作成：MDX
+- ホスティング：Vercel
+- ロゴ作成：Bing Image Creator
 
-```js title="line-markers.js" del={2} ins={3-4} {6}
-function demo() {
-  console.log("this line is marked as deleted");
-  // This line and the next one are marked as inserted
-  console.log("this is the second inserted line");
+ブログ作成はAstroの学習もかねていたんですが、とても使いやすく非常に満足です。
 
-  return "this line uses the neutral default marker type";
-}
-```
+<MDXImageFrame width="100px" src={photo} alt={"logo"} />
 
-[俺のようつべ](https://www.youtube.com/@yeti2061)
+このロゴは画像生成AIに作成してもらいました。イメージは宇宙飛行士の格好をしたイエティです。絵心のない自分では一からデザインを生み出すのは厳しいので、とても助かりますね。このロゴも自分的にはかなり気に入ってます。
 
-ここに`code`を使ってみました`こんにちは`
+cssに関しては、Tailwind CSS を初めて使ってみました。最初は慣れないととっつきにくいイメージだったんですが、慣れてくるとめちゃくちゃ楽にcssが書けますね。人気の理由が分かりました。
 
-| Left align | Right align | Center align |
-| :--------- | ----------: | :----------: |
-| This       |        This |     This     |
-| column     |      column |    column    |
-| will       |        will |     will     |
-| be         |          be |      be      |
-| left       |       right |    center    |
-| aligned    |     aligned |   aligned    |
+## サイト更新
+
+ひとまずある程度形にはなったのですが、これからも継続的にサイトの機能をアップデートしていきたい所存でございます。
+
+いまのところ実装したい機能としては
+
+- ダークモード対応
+- seoの最適化
+
+とか。特にダークモード対応はやったことがないので、実現したいですね。
