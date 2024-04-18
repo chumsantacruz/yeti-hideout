@@ -5,7 +5,6 @@ const photoCollection = defineCollection({
   schema: z.object({
     img: z.string(),
     camera: z.string(),
-    film: z.string()
   })
 })
 

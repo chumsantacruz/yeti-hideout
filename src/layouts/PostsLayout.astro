@@ -1,0 +1,30 @@
+---
+import Layout from "../layouts/Layout.astro";
+import ArticleCard from "../components/ArticleCard.astro";
+import Pagination from "../components/Pagination.astro";
+
+const { title, page } = Astro.props;
+---
+
+<Layout title={title}>
+  <slot />
+  <div class="grid gap-3 xl:grid-cols-2">
+    {
+      page.data.map(
+        (post: {
+          id: string;
+          slug: string;
+          body: string;
+          collection: "posts";
+          data: {
+            title: string;
+            description: string;
+            pubDate: Date;
+            tag: string[];
+          };
+        }) => <ArticleCard post={post} />
+      )
+    }
+  </div>
+  <Pagination page={page}/>
+</Layout>
