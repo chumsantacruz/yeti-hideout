@@ -10,5 +10,7 @@ export default defineConfig({
   integrations: [tailwind(), expressiveCode(), mdx()],
   prefetch: true,
   output: "server",
-  adapter: vercel()
+  adapter: vercel({
+    webAnalytics: { enabled: true },
+  }),
 });
