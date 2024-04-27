@@ -6,27 +6,8 @@ import {
   ContactShadows,
   Html,
 } from "@react-three/drei";
-import { useControls } from "leva";
 
 export default function Experience() {
-  /**
-   * Debug
-   */
-  const { htmlPositionX, htmlPositionY, htmlPositionZ } = useControls(
-    "htmlPosition",
-    {
-      htmlPositionX: { value: -0.28, step: 0.01 },
-      htmlPositionY: { value: 1.31, step: 0.01 },
-      htmlPositionZ: { value: -1.44, step: 0.01 },
-    },
-  );
-  const { distanceFactor } = useControls("distanceFactor", {
-    distanceFactor: { value: 1.11, step: 0.01 },
-  });
-  const { htmlRotationX } = useControls("htmlRotationX", {
-    htmlRotationX: { value: -0.256, step: 0.001 },
-  });
-
   /**
    * Model
    */
@@ -35,13 +16,12 @@ export default function Experience() {
   );
   return (
     <>
-      {/* <color args={["orange"]} attach={"background"} /> */}
       <Environment preset="city" />
       <PresentationControls
         global
         rotation={[0, 0, 0]}
-        polar={[-0.4, 0.2]}
-        azimuth={[-1, 0.75]}
+        polar={[-0.1, 0.1]}
+        azimuth={[-0.5, 0.1]}
         config={{ mass: 2, tension: 400 }}
         snap={{ mass: 4, tension: 400 }}
       >
@@ -57,9 +37,9 @@ export default function Experience() {
           <primitive object={computer.scene} position-y={-1.2}>
             <Html
               transform
-              distanceFactor={distanceFactor}
-              position={[htmlPositionX, htmlPositionY, htmlPositionZ]}
-              rotation-x={htmlRotationX}
+              distanceFactor={1.14}
+              position={[-0.2, 2.06, -1.5]}
+              rotation-x={-0.256}
             >
               <iframe src="https://www.chumsantacruz.com/"></iframe>
             </Html>
