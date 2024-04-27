@@ -12,11 +12,21 @@
   "dependencies": {
     "@astrojs/check": "^0.5.10",
     "@astrojs/mdx": "^2.2.4",
+    "@astrojs/react": "^3.3.1",
     "@astrojs/tailwind": "^5.1.0",
+    "@react-three/drei": "^9.105.4",
+    "@react-three/fiber": "^8.16.2",
+    "@types/react": "^18.3.1",
+    "@types/react-dom": "^18.3.0",
+    "@types/three": "^0.164.0",
     "astro": "^4.5.16",
     "astro-expressive-code": "^0.34.1",
+    "leva": "^0.9.35",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "sass": "^1.74.1",
     "tailwindcss": "^3.4.3",
+    "three": "^0.164.1",
     "typescript": "^5.4.4"
   },
   "devDependencies": {
