@@ -13,7 +13,7 @@ const url = decodeURI(Astro.url.pathname);
     {
       uniqueTags.map((tag) => (
         <a
-          class={`block bg-gray-200 rounded-full px-3 hover:opacity-70 ${url.includes(tag) ? "bg-gray-400" : "bg-tag"}`}
+          class={`block bg-gray-200 rounded-full px-3 hover:opacity-70 ${url.includes(tag) ? "bg-tag-selected" : "bg-tag-default"}`}
           href={`/posts/tags/${tag}/`}
         >
           {tag}

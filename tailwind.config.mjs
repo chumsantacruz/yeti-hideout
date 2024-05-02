@@ -7,8 +7,12 @@ export default {
         background: "var(--background)",
         foreground: "var(--foreground)",
         header: "var(--background-header)",
+        dialog: "var(--background-dialog)",
         panel: "var(--background-panel)",
-        tag: "var(--background-tag)",
+        tag: {
+          default: "var(--background-tag)",
+          selected: "var(--background-tag-selected)",
+        },
         posts: "var(--background-posts)",
         arrow: "var(--arrow)",
       },

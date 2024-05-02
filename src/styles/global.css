@@ -5,28 +5,33 @@
 @layer base {
   :root {
     /* ベースの背景色 */
-    --background: #f3f4f6;
+    --background: #e2e8f0;
     /* ベースの文字色 */
     --foreground: #000000;
     /* ヘッダーの背景色 */
-    --background-header: #f8fafc;
+    --background-header: #f8fafccc;
+    /* sp ヘッダーダイアログの背景色 */
+    --background-dialog: #f8fafc;
     /* パネルの背景色 */
-    --background-panel: #f9fafb;
+    --background-panel: #f1f5f9;
     /* タグの背景色 */
     --background-tag: #e5e7eb;
+    --background-tag-selected: #cbd5e1;
     /* ポスト一覧の背景色 */
-    --background-posts: #e5e7eb;
+    --background-posts: #ffffff;
     /* 矢印アイコン */
     --arrow: #4b5563;
   }
 
   :root[data-theme="dracula"] {
-    --background: #040d1f;
+    --background: #0f172a;
     --foreground: #ffffff;
-    --background-header: #202020;
-    --background-panel: rgb(65, 65, 65);
-    --background-tag: #333333;
-    --background-posts: #1d1d1d;
+    --background-header: #1e293bcc;
+    --background-dialog: #64748b;
+    --background-panel: #1e293b;
+    --background-tag: #64748b;
+    --background-tag-selected: #075985;
+    --background-posts: #334155;
     --arrow: #f3f3f3;
   }
 }

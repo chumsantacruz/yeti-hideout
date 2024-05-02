@@ -21,7 +21,7 @@ const { post } = Astro.props;
       {
         post.data.tag.map((tag: string) => (
           <a
-            class={`bg-gray-100 text-sm px-3 py-1 h-fit rounded hover:opacity-70 ${url.includes(tag) ? "bg-gray-300" : "bg-tag"}`}
+            class={`bg-gray-100 text-sm px-3 py-1 h-fit rounded hover:opacity-70 ${url.includes(tag) ? "bg-tag-selected" : "bg-tag-default"}`}
             href={`/posts/tags/${tag}/`}
           >
             {tag}
