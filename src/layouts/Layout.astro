@@ -8,17 +8,29 @@ interface Props {
   h1?: boolean;
 }
 
+const url = decodeURI(Astro.url.href);
+
 const { title, h1 = true } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="ja" class="font-sans text-[15px] overflow-x-hidden">
+<html
+  lang="ja"
+  class="font-sans text-[15px] overflow-x-hidden"
+  data-theme="light"
+>
   <head>
     <meta charset="UTF-8" />
-    <meta name="description" content="Astro description" />
     <meta name="viewport" content="width=device-width" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
+    <meta name="description" content="Astro description" />
+    <meta name="og:type" content="website" />
+    <meta name="og:title" content={title} />
+    <meta name="og:url" content={url} />
+    <meta name="og:description" content="" />
+    <meta name="og:image" content="" />
+    <meta name="color-scheme" content="light" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{title}</title>
     <ViewTransitions />
   </head>
