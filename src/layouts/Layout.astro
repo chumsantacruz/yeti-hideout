@@ -9,7 +9,7 @@ interface Props {
   h1?: boolean;
 }
 
-const url = decodeURI(Astro.url.href);
+const url = decodeURI(Astro.url.pathname);
 
 const { title, h1 = true } = Astro.props;
 ---
@@ -27,10 +27,9 @@ const { title, h1 = true } = Astro.props;
     <meta name="description" content="Astro description" />
     <meta name="og:type" content="website" />
     <meta name="og:title" content={title} />
-    <meta name="og:url" content={url} />
+    <meta name="og:url" content={`https://www.chumsantacruz.com${url}`} />
     <meta name="og:description" content="" />
-    <meta name="og:image" content="" />
-    <meta name="color-scheme" content="light" />
+    <meta name="og:image" content="chumsatacruzの個人ブログ" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{title}</title>
     <ViewTransitions />
