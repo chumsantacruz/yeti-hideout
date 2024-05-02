@@ -3,6 +3,15 @@ export default {
   content: ["./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}"],
   theme: {
     extend: {
+      colors: {
+        background: "var(--background)",
+        foreground: "var(--foreground)",
+        header: "var(--background-header)",
+        panel: "var(--background-panel)",
+        tag: "var(--background-tag)",
+        posts: "var(--background-posts)",
+        arrow: "var(--arrow)",
+      },
       gridTemplateColumns: {
         header: "2rem auto",
         "post-bottom": "max-content auto",

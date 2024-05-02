@@ -10,7 +10,7 @@ export default defineConfig({
   integrations: [
     tailwind(),
     expressiveCode({
-      themes: ["dracula", "solarized-light"],
+      themes: ["dracula", "github-light"],
     }),
     mdx(),
     react(),

@@ -4,7 +4,7 @@ const url = Astro.url.pathname;
 ---
 
 <header
-  class="sticky shadow top-0 z-40 w-full bg-slate-50 h-12 px-5 grid place-items-center"
+  class="sticky shadow top-0 z-40 w-full bg-header h-12 px-5 flex justify-between place-items-center"
 >
   <button
     data-button="open"
@@ -22,11 +22,13 @@ const url = Astro.url.pathname;
     </span>
     <span
       data-allow
-      class="inline-block w-2 border-gray-600 -rotate-45 border-l-2 border-b-2 aspect-square origin-center -mt-1"
+      class="inline-block w-2 border-arrow -rotate-45 border-l-2 border-b-2 aspect-square origin-center -mt-1"
     ></span>
   </button>
 
-  <dialog class="absolute top-12 left-2 bg-white m-0 shadow-md">
+  <dialog
+    class="absolute top-12 left-2 text-foreground bg-header m-0 shadow-md"
+  >
     <nav>
       <ul class="w-full grid auto-rows-max gap-2 p-5 text-lg">
         <li>

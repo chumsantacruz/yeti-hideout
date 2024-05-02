@@ -1,0 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* ベースの背景色 */
+    --background: #f3f4f6;
+    /* ベースの文字色 */
+    --foreground: #000000;
+    /* ヘッダーの背景色 */
+    --background-header: #f8fafc;
+    /* パネルの背景色 */
+    --background-panel: #f9fafb;
+    /* タグの背景色 */
+    --background-tag: #e5e7eb;
+    /* ポスト一覧の背景色 */
+    --background-posts: #e5e7eb;
+    /* 矢印アイコン */
+    --arrow: #4b5563;
+  }
+
+  :root[data-theme="dracula"] {
+    --background: #040d1f;
+    --foreground: #ffffff;
+    --background-header: #202020;
+    --background-panel: rgb(65, 65, 65);
+    --background-tag: #333333;
+    --background-posts: #1d1d1d;
+    --arrow: #f3f3f3;
+  }
+}

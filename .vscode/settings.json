@@ -15,5 +15,8 @@
     "javascriptreact",
     "typescript",
     "typescriptreact"
-  ]
+  ],
+  "[svg]": {
+    "editor.defaultFormatter": "jock.svg"
+  }
 }

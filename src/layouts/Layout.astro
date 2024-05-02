@@ -3,6 +3,7 @@ import { ViewTransitions } from "astro:transitions";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import SideNav from "../components/SideNav.astro";
+import "../styles/global.css";
 interface Props {
   title: string;
   h1?: boolean;
@@ -17,7 +18,7 @@ const { title, h1 = true } = Astro.props;
 <html
   lang="ja"
   class="font-sans text-[15px] overflow-x-hidden"
-  data-theme="light"
+  data-theme="github-light"
 >
   <head>
     <meta charset="UTF-8" />
@@ -34,7 +35,7 @@ const { title, h1 = true } = Astro.props;
     <title>{title}</title>
     <ViewTransitions />
   </head>
-  <body class="bg-gray-100 min-h-lvh grid grid-rows-layout">
+  <body class="bg-background text-foreground min-h-lvh grid grid-rows-layout">
     <Header transition:persist />
     <main class="container w-svw mx-auto px-5 py-8 md:flex gap-6 items-start">
       <nav class="hidden shrink-0 w-64 sticky top-24 md:block">
