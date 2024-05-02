@@ -6,14 +6,14 @@ const links = ["Home", "Posts", "Photos"];
 ---
 
 <div class="grid auto-rows-max gap-4">
-  <ul class="bg-gray-50 rounded shadow-sm text-3xl p-5 grid gap-5">
+  <ul class="bg-panel rounded shadow-sm text-3xl p-5 grid gap-5">
     {
       links.map((link) => {
         if (link === "Home") {
           return (
             <li>
               <a
-                class={`hover:opacity-70 underline-offset-4 ${Astro.url.pathname === '/' ? "underline" : null}`}
+                class={`hover:opacity-70 underline-offset-4 ${Astro.url.pathname === "/" ? "underline" : null}`}
                 href="/"
               >
                 {link}

@@ -7,6 +7,13 @@ import react from "@astrojs/react";
 
 // https://astro.build/config
 export default defineConfig({
-  integrations: [tailwind(), expressiveCode(), mdx(), react()],
-  prefetch: true
+  integrations: [
+    tailwind(),
+    expressiveCode({
+      themes: ["dracula", "github-light"],
+    }),
+    mdx(),
+    react(),
+  ],
+  prefetch: true,
 });

@@ -3,26 +3,39 @@ import { ViewTransitions } from "astro:transitions";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import SideNav from "../components/SideNav.astro";
+import "../styles/global.css";
 interface Props {
   title: string;
   h1?: boolean;
 }
 
+const url = decodeURI(Astro.url.href);
+
 const { title, h1 = true } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="ja" class="font-sans text-[15px] overflow-x-hidden">
+<html
+  lang="ja"
+  class="font-sans text-[15px] overflow-x-hidden"
+  data-theme="github-light"
+>
   <head>
     <meta charset="UTF-8" />
-    <meta name="description" content="Astro description" />
     <meta name="viewport" content="width=device-width" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
+    <meta name="description" content="Astro description" />
+    <meta name="og:type" content="website" />
+    <meta name="og:title" content={title} />
+    <meta name="og:url" content={url} />
+    <meta name="og:description" content="" />
+    <meta name="og:image" content="" />
+    <meta name="color-scheme" content="light" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{title}</title>
     <ViewTransitions />
   </head>
-  <body class="bg-gray-100 min-h-lvh grid grid-rows-layout">
+  <body class="bg-background text-foreground min-h-lvh grid grid-rows-layout">
     <Header transition:persist />
     <main class="container w-svw mx-auto px-5 py-8 md:flex gap-6 items-start">
       <nav class="hidden shrink-0 w-64 sticky top-24 md:block">

@@ -1,10 +1,10 @@
 ---
-const url = decodeURI(Astro.url.pathname)
+const url = decodeURI(Astro.url.pathname);
 
-const {post} = Astro.props
+const { post } = Astro.props;
 ---
 
-<article class="bg-gray-200 p-3 shadow grid gap-3">
+<article class="bg-posts p-3 shadow grid gap-3">
   <div class="grid gap-2">
     <a
       class="text-blue-400 text-lg block hover:underline underline-offset-4"
@@ -18,9 +18,16 @@ const {post} = Astro.props
   <div class="grid grid-cols-post-bottom gap-3 h-fit self-end">
     <p class="text-sm">{post.data.pubDate.toLocaleDateString("ja-JP")}</p>
     <div class="flex flex-wrap gap-2">
-      {post.data.tag.map((tag: string) =>(
-        <a class={`bg-gray-100 text-sm px-3 py-1 h-fit rounded hover:opacity-70 ${url.includes(tag) ? 'bg-gray-300' : 'bg-gray-100'}`} href={`/posts/tags/${tag}/`}>{tag}</a>
-      ))}
+      {
+        post.data.tag.map((tag: string) => (
+          <a
+            class={`bg-gray-100 text-sm px-3 py-1 h-fit rounded hover:opacity-70 ${url.includes(tag) ? "bg-gray-300" : "bg-tag"}`}
+            href={`/posts/tags/${tag}/`}
+          >
+            {tag}
+          </a>
+        ))
+      }
     </div>
   </div>
 </article>

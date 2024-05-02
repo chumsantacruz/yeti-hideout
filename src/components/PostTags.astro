@@ -1,17 +1,24 @@
 ---
 import { getCollection } from "astro:content";
 
-const posts = await getCollection('posts')
-const uniqueTags = [...new Set(posts.map(post => post.data.tag).flat())]
+const posts = await getCollection("posts");
+const uniqueTags = [...new Set(posts.map((post) => post.data.tag).flat())];
 
-const url = decodeURI(Astro.url.pathname)
+const url = decodeURI(Astro.url.pathname);
 ---
 
-<div class="bg-gray-50 rounded shadow-sm p-5">
+<div class="bg-panel rounded shadow-sm p-5">
   <p class="mb-4 text-lg">Tags 🏷️</p>
   <div class="flex gap-2 flex-wrap">
-  {uniqueTags.map(tag => (
-    <a class={`block bg-gray-200 rounded-full px-3 hover:opacity-70 ${url.includes(tag) ? 'bg-gray-400' : 'bg-gray-200'}`} href={`/posts/tags/${tag}/`}>{tag}</a>
-  ))}
+    {
+      uniqueTags.map((tag) => (
+        <a
+          class={`block bg-gray-200 rounded-full px-3 hover:opacity-70 ${url.includes(tag) ? "bg-gray-400" : "bg-tag"}`}
+          href={`/posts/tags/${tag}/`}
+        >
+          {tag}
+        </a>
+      ))
+    }
   </div>
 </div>
