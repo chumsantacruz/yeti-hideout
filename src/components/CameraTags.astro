@@ -1,5 +1,6 @@
 ---
 import { getAllPhotos } from "../utils/getAllPhotos";
+import Tag from "./Tag.astro";
 
 const photos = await getAllPhotos();
 const uniqueCameras = [...new Set(photos.map((photo) => photo.data.camera))];
@@ -12,12 +13,7 @@ const url = decodeURI(Astro.url.pathname);
   <div class="flex gap-2 flex-wrap">
     {
       uniqueCameras.map((camera) => (
-        <a
-          class={`block rounded-full px-3 hover:opacity-70 ${url.includes(camera) ? "bg-tag-selected" : "bg-tag-default"}`}
-          href={`/photos/${camera}/`}
-        >
-          {camera}
-        </a>
+        <Tag tag={camera} url={url} path="photos" />
       ))
     }
   </div>

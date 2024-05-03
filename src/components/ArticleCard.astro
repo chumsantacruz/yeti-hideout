@@ -1,4 +1,5 @@
 ---
+import Tag from "./Tag.astro";
 const url = decodeURI(Astro.url.pathname);
 
 const { post } = Astro.props;
@@ -20,12 +21,7 @@ const { post } = Astro.props;
     <div class="flex flex-wrap gap-2">
       {
         post.data.tag.map((tag: string) => (
-          <a
-            class={`bg-gray-100 text-sm px-3 py-1 h-fit rounded hover:opacity-70 ${url.includes(tag) ? "bg-tag-selected" : "bg-tag-default"}`}
-            href={`/posts/tags/${tag}/`}
-          >
-            {tag}
-          </a>
+          <Tag tag={tag} url={url} path="posts/tags" />
         ))
       }
     </div>
