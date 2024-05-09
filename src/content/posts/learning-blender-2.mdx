@@ -1,0 +1,27 @@
+---
+title: "Blender学習記録#2"
+description: "おもちゃのロケットをつくってみた"
+pubDate: 2024-05-09
+tag: ["Blender", "Three.js"]
+---
+
+import MDXTargetBlank from "../../components/MDXTargetBlank.astro";
+import Rocket from "../../components/r3f/rocket/Rocket.astro";
+
+<MDXTargetBlank
+  url={
+    "https://www.youtube.com/playlist?list=PLeT_wSzdo1WxLPgYVWGHXZw0tfN-d-3xr"
+  }
+/>
+
+こちらの動画を参考におもちゃのロケットをつくってみた。
+
+ほぼ完成のところでblenderが落ち、まったく途中で保存していなかったせいで一度すべてが無になった。頭を抱えた。こまめにファイルを保存することの大事さを身をもって実感した。
+
+モデリングに関しては基本的な操作の仕方は結構できるようになってきたけど、細かい便利な操作方法はまだしらないものがたくさんあると思う。
+
+参考にした動画では、アニメーションとかレンダリングとかシェーダーの使い方も解説してくれていてとても参考になった。
+
+blenderでの見た目とgltfに書き出した後のthreejsでの見た目は結構違うみたい。blender内で使用したmodifierとかも適用させないと書き出したモデルに反映されない。奥が深いですなあ
+
+<Rocket />
