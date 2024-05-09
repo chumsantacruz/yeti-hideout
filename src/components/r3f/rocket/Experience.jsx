@@ -4,7 +4,7 @@ export default function Experience() {
   /**
    * Model
    */
-  const room = useGLTF("/model/jeep.glb");
+  const room = useGLTF("/model/rocket.glb");
   return (
     <>
       <OrbitControls />

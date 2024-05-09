@@ -1,23 +1,27 @@
 ---
 title: "Blender学習記録#2"
-description: "Jeepつくってみた"
-pubDate: 2024-05-08
+description: "おもちゃのロケットをつくってみた"
+pubDate: 2024-05-09
 tag: ["Blender", "Three.js"]
 ---
 
 import MDXTargetBlank from "../../components/MDXTargetBlank.astro";
-import Jeep from "../../components/r3f/jeep/Jeep.astro";
+import Rocket from "../../components/r3f/rocket/Rocket.astro";
 
-<MDXTargetBlank url={"https://www.youtube.com/watch?v=JKCQrDZ52X8"} />;
+<MDXTargetBlank
+  url={
+    "https://www.youtube.com/playlist?list=PLeT_wSzdo1WxLPgYVWGHXZw0tfN-d-3xr"
+  }
+/>
 
-YoutubeのBlender講座を参考に部屋を作った。
+こちらの動画を参考におもちゃのロケットをつくってみた。
 
-YoutubeにはBlenderのチュートリアル動画にあふれていて、本当にありがたいでございます。
+ほぼ完成のところでblenderが落ち、まったく途中で保存していなかったせいで一度すべてが無になった。頭を抱えた。こまめにファイルを保存することの大事さを身をもって実感した。
 
-操作方法が複雑だけど、使い方を覚えればいろんなことができそうで楽しい。
+モデリングに関しては基本的な操作の仕方は結構できるようになってきたけど、細かい便利な操作方法はまだしらないものがたくさんあると思う。
 
-やっぱり自分で手を動かしてやったほうが覚えが早い。
+参考にした動画では、アニメーションとかレンダリングとかシェーダーの使い方も解説してくれていてとても参考になった。
 
-何事もとにかくやるべし。
+blenderでの見た目とgltfに書き出した後のthreejsでの見た目は結構違うみたい。blender内で使用したmodifierとかも適用させないと書き出したモデルに反映されない。奥が深いですなあ
 
-<Jeep />
+<Rocket />
