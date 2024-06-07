@@ -15,6 +15,8 @@ export default {
         },
         posts: "var(--background-posts)",
         arrow: "var(--arrow)",
+        code: "var(--code)",
+        link: "var(--link)",
       },
       gridTemplateColumns: {
         header: "2rem auto",

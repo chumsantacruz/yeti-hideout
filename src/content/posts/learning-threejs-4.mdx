@@ -1,0 +1,161 @@
+---
+title: "three.js概論#2"
+description: "オブジェクトの変形について"
+pubDate: 2024-06-07
+tag: ["three.js"]
+---
+
+import MDXTargetBlank from "../../components/MDXTargetBlank.astro";
+
+## オブジェクトの変形
+
+シーン内のオブジェクトを変形させる4つのプロパティ
+
+- position - 位置
+- scale - 大きさ
+- rotation - 回転
+- quaternion - クォータニオン
+
+これらのプロパティはマトリックスと呼ばれるものにコンパイルされる。<br />
+マトリックスは、位置、回転、大きさを表す4x4の行列で、three.jsの内部、WebGL、そしてGPUでオブジェクトの変形に使われる。<br />
+マトリックスを自分で操作する必要はなく、three.jsはこれらのプロパティを直接操作することができる。
+
+### position
+
+`position`はオブジェクトの位置を表す3次元ベクトルで、`x`、`y`、`z`の3つの値を持つ。<br />
+各軸の方向は、環境によって変化するが、three.jsでは通常、`x`軸が右、`y`軸が上、`z`軸が手前と考える。<br />
+`position`は<MDXTargetBlank
+url={"https://threejs.org/docs/#api/en/math/Vector3"}
+title={"Vector3"}
+/>クラスのインスタンスで、他にも様々なメソッドを持つ。
+
+```javascript title="positionの設定"
+mesh.position.x = 0.7;
+mesh.position.y = -0.6;
+mesh.position.z = 1;
+
+// setメソッドを使っても同じ
+mesh.position.set(0.7, -0.6, 1);
+
+// ベクトルの長さを取得
+mesh.position.length();
+
+// 他のベクトルとの距離を取得
+mesh.position.distanceTo(camera.position);
+
+// ベクトルの長さを1に正規化
+mesh.position.normalize();
+```
+
+#### 軸ヘルパー
+
+3D空間上の軸を表示するヘルパーとして<MDXTargetBlank
+url={"https://threejs.org/docs/#api/en/helpers/AxesHelper"}
+title={"AxesHelper"}
+/>を使うことができる。
+
+`AxesHelper`は、x、y、z軸に対応する3本の線を表示し、それぞれがシーンの中心から始まり、対応する方向に進む。
+
+```javascript title="軸ヘルパーの作成"
+// 引数の2は軸の長さ
+const axesHelper = new THREE.AxesHelper(2);
+scene.add(axesHelper);
+```
+
+### scale
+
+`scale`も<MDXTargetBlank
+url={"https://threejs.org/docs/#api/en/math/Vector3"}
+title={"Vector3"}
+/>クラスのインスタンスで、デフォルト値は`(1, 1, 1)`で、各軸の拡大率を表す。
+
+```javascript title="scaleの設定"
+mesh.scale.x = 2;
+mesh.scale.y = 0.25;
+mesh.scale.z = 0.5;
+```
+
+### オブジェクトの回転
+
+オブジェクトの回転は、`rotation`プロパティまたは`quaternion`プロパティを使って行う。<br />
+three.jsは両方をサポートしており、一方を更新すると他方も自動的に更新される。
+
+一般的には`rotation`プロパティを使うことが多い。
+
+#### rotation
+
+`rotation`はオブジェクトの回転を表す3次元ベクトルで、`x`、`y`、`z`の3つの値を持つ。<br />
+こちらは`Vector3`ではなく、<MDXTargetBlank url={"https://threejs.org/docs/#api/en/math/Euler"} title={"Euler"} />クラスのインスタンス。
+
+各軸の値はラジアン単位で表される。ラジアンは角度の単位で、円周率πを使って表す。<br />
+例えば、90度はπ/2ラジアン、180度はπラジアン、270度は3π/2ラジアンとなる。<br />
+JavaScriptでは、`Math.PI`を使ってπを表すことができる。
+
+```javascript title="rotationの設定"
+mesh.rotation.x = Math.PI * 0.25;
+mesh.rotation.y = Math.PI * 0.25;
+```
+
+回転はx,y,zの順に適用され、それぞれの軸はローカル座標系で回転する。<br />
+`reorder()`メソッドを使って回転の順序を変更することもできる。
+
+```javascript title="rotationの順序変更"
+mesh.rotation.reorder("YXZ");
+```
+
+#### quaternion
+
+`quaternion`プロパティもオブジェクトの回転を表すが、`Euler`クラスとは異なり、<MDXTargetBlank url={"https://threejs.org/docs/#api/en/math/Quaternion"} title={"Quaternion"} />クラスのインスタンス。<br />
+quaternionは3Dコンピュータグラフィックスやロボティクスなどでよく使われる数学的な表現。
+
+#### lookAt
+
+Object3Dクラスのインスタンスが持つ<MDXTargetBlank
+url={"https://threejs.org/docs/#api/en/core/Object3D.lookAt"}
+title={"lookAt"}
+/>メソッドを使うと、オブジェクトを指定した位置に向けることができる。
+
+```javascript title="lookAtメソッド"
+camera.lookAt(mesh.position);
+```
+
+### オブジェクトをグループ化
+
+複数のオブジェクトをグループ化する<MDXTargetBlank
+url={"https://threejs.org/docs/#api/en/objects/Group"}
+title={"Group"}
+/>クラスを使うことで、一つのオブジェクトとして扱うことができる。
+
+オブジェクトをグループ化することで、一つのオブジェクトとして扱うことができるため、位置、回転、拡大縮小などを一括で操作することができる。
+
+```javascript title="オブジェクトのグループ化"
+// グループを作成
+const group = new THREE.Group();
+group.scale.y = 2;
+group.rotation.y = 0.2;
+scene.add(group);
+
+// オブジェクトを作成
+const cube1 = new THREE.Mesh(
+  new THREE.BoxGeometry(1, 1, 1),
+  new THREE.MeshBasicMaterial({ color: 0xff0000 }),
+);
+cube1.position.x = -1.5;
+
+const cube2 = new THREE.Mesh(
+  new THREE.BoxGeometry(1, 1, 1),
+  new THREE.MeshBasicMaterial({ color: 0xff0000 }),
+);
+cube2.position.x = 0;
+
+const cube3 = new THREE.Mesh(
+  new THREE.BoxGeometry(1, 1, 1),
+  new THREE.MeshBasicMaterial({ color: 0xff0000 }),
+);
+cube3.position.x = 1.5;
+
+// グループにオブジェクトを追加
+group.add(cube1);
+group.add(cube2);
+group.add(cube3);
+```

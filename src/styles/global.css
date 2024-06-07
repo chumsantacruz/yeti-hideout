@@ -21,6 +21,10 @@
     --background-posts: #ffffff;
     /* 矢印アイコン */
     --arrow: #4b5563;
+    /* インラインコード */
+    --code: #94a3b8;
+    /* リンク */
+    --link: #024eff;
   }
 
   :root[data-theme="dracula"] {
@@ -33,5 +37,7 @@
     --background-tag-selected: #075985;
     --background-posts: #334155;
     --arrow: #f3f3f3;
+    --code: #4f5e73;
+    --link: #58a6ff;
   }
 }

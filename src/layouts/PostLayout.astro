@@ -25,19 +25,19 @@ const { frontmatter } = Astro.props;
     }
 
     h1 {
-      @apply mb-4 text-2xl;
+      @apply mb-4 text-3xl;
     }
 
     h2 {
-      @apply text-xl mt-6 pl-2 border-l-slate-900 border-l-[3px];
+      @apply text-2xl mt-6 pl-2 border-l-foreground border-l-[3px];
     }
 
     h3 {
-      @apply text-lg;
+      @apply text-xl;
     }
 
     h4 {
-      @apply border-l-2 border-l-gray-600 pl-3 text-base;
+      @apply text-lg border-l-2 border-l-gray-600 pl-3;
     }
 
     p {
@@ -58,11 +58,11 @@ const { frontmatter } = Astro.props;
     }
 
     a {
-      @apply text-blue-600;
+      @apply text-link;
     }
 
     code:not(pre > *) {
-      @apply bg-slate-400 text-white;
+      @apply bg-code text-white px-1;
     }
 
     blockquote {
