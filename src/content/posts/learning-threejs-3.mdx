@@ -1,0 +1,116 @@
+---
+title: "three.js概論#1"
+description: "r3fでノートパソコンにiframeでサイトを表示してみる"
+pubDate: 2024-06-07
+tag: ["three.js", "WebGL"]
+---
+
+import MDXTargetBlank from "../../components/MDXTargetBlank.astro";
+import Example from "../../components/example/introduction-1/Example.astro";
+
+## three.jsとは
+
+<MDXTargetBlank url={"https://threejs.org/"} title={"公式サイト"} />
+
+three.jsは3DグラフィックスをWebブラウザ上で表示するためのJavaScriptライブラリ。<br />
+Three.jsを使用することで、HTML5のcanvas要素やWebGL（Web Graphics Library）を利用して、複雑な3Dシーンを簡単に描画することができる。
+
+## WebGL
+
+WebGL（Web Graphics Library）は、Webブラウザ上で3Dグラフィックスを描画するためのJavaScript API。<br />
+各ブラウザーと互換性があり、GPUを使用するため3Dグラフィックスを高速で描画することができる。<br />
+
+WebGLで3Dグラフィックスを描画するためには、JavaScriptでGLSL（OpenGL Shading Language）というシェーダー言語を使用する必要がある。<br />
+three.jsは、WebGLを使用するためのラッパーライブラリで、GLSLを使用することなく3Dグラフィックスを描画することができる。
+
+## インストール
+
+公式ドキュメントでは、npmとビルドツール(`vite`)を使用してthree.jsをインストールすることを推奨している。<br />
+
+npmでインストールする場合は以下のコマンドを実行する。
+
+```shellscript
+# three.js
+npm install --save three
+
+# vite
+npm install --save-dev vite
+```
+
+```js title="index.js"
+import * as THREE from 'three';
+
+...
+```
+
+## シーンを作成
+
+three.js画面上に何かを表示させるには、シーン、カメラ、レンダラー、オブジェクトが必要。
+
+```html title="index.html"
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>My first three.js app</title>
+    <style>
+      body {
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <script type="module" src="/index.js"></script>
+  </body>
+</html>
+```
+
+```js title="index.js"
+import * as THREE from "three";
+
+// シーン
+const scene = new THREE.Scene();
+
+// カメラ
+const camera = new THREE.PerspectiveCamera(
+  75,
+  window.innerWidth / window.innerHeight,
+  0.1,
+  1000,
+);
+camera.position.z = 3;
+
+// レンダラー
+const renderer = new THREE.WebGLRenderer();
+renderer.setSize(window.innerWidth, window.innerHeight);
+
+// オブジェクト
+const geometry = new THREE.BoxGeometry(1, 1, 1);
+const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+const cube = new THREE.Mesh(geometry, material);
+scene.add(cube);
+
+// DOMにレンダラーを追加
+document.body.appendChild(renderer.domElement);
+```
+
+### シーンをレンダリング
+
+レンダラーのrenderメソッドを使って、シーンをレンダリングする。<br />
+requestAnimationFrameメソッドを使って、フレームごとにレンダリングを行う。
+
+```js title="index.js"
+function tick() {
+  //　フレームごとに実行
+  requestAnimationFrame(tick);
+
+  cube.rotation.x += 0.01;
+  cube.rotation.y += 0.01;
+
+  renderer.render(scene, camera);
+}
+
+tick();
+```
+
+<Example />
