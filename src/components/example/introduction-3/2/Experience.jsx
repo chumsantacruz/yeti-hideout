@@ -8,7 +8,7 @@ export default function Experience() {
 
   useEffect(() => {
     const canvas = gl.domElement;
-    canvas.addEventListener("mousemove", (e) => {
+    canvas.addEventListener("pointermove", (e) => {
       setCursorX(e.offsetX / canvas.clientWidth - 0.5);
       setCursorY(-(e.offsetY / canvas.clientHeight - 0.5));
     });

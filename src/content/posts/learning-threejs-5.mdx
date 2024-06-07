@@ -1,7 +1,7 @@
 ---
 title: "three.js概論#3"
-description: "アニメーションについて"
-pubDate: 2024-06-07
+description: "アニメーションとかカメラとかリサイズ処理とか"
+pubDate: 2024-06-09
 tag: ["three.js"]
 ---
 
@@ -169,7 +169,7 @@ const cursor = {
   y: 0,
 };
 
-window.addEventListener("mousemove", (event) => {
+window.addEventListener("pointermove", (event) => {
   // カーソル位置の値が-0.5から+0.5になるように調整
   cursor.x = event.clientX / sizes.width - 0.5;
   // three.jsのy軸と合わせるために値を反転
@@ -249,4 +249,111 @@ const tick = () => {
 
   // ...
 };
+```
+
+## フルスクリーンとリサイズ処理
+
+### ビューポートに合わせる
+
+画面をビューポートいっぱいにするために、`rendrer.setSize()`に渡す高さと幅に、`window.inndrWidth`と`window.innerHeight`を使用する。
+
+```js
+const sizes = {
+  width: window.innerWidth,
+  height: window.innerHeight,
+};
+
+const renderer = new THREE.WebGLRenderer();
+renderer.setSize(sizes.width, sizes.height);
+```
+
+また、デフォルトのスタイルを修正する必要がある。
+
+```css title="style.css"
+* {
+  margin: 0;
+  padding: 0;
+}
+
+canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  /* ドラッグ&ドロップしたときに青い輪郭が表示されないように以下のプロパティを設定 */
+  outline: none;
+}
+
+/* タッチスクリーンでもスクロールをなくしたい場合は、htmlとbodyの両方にoverflow: hiddenを追加 */
+html,
+body {
+  overflow: hidden;
+}
+```
+
+### リサイズ処理
+
+イベントハンドラを設定してリサイズ処理を行う。
+
+```js
+window.addEventListener("resize", () => {
+  // ウィンドウ幅と高さを更新
+  sizes.width = window.innerWidth;
+  sizes.height = window.innerHeight;
+
+  // カメラのアスペクト比を更新
+  camera.aspect = sizes.width / sizes.height;
+  // カメラプロパティを更新したら、以下のメソッドを使用してprojection matrixを更新する必要がある。
+  camera.updateProjectionMatrix();
+
+  // rendererを更新
+  renderer.setSize(sizes.width, sizes.height);
+});
+```
+
+### デバイスピクセル比の処理
+
+#### デバイスピクセル比とは
+
+デバイスピクセル比(DPR)とは、論理的な1ピクセル単位に対して、画面上の何個の物理的なピクセルで表示されるかを示す比率。
+
+例えば、DPRが2の場合、1つの論理的なピクセルは物理的に2x2ピクセル（4ピクセル）で表示される。これにより、より高精細な表示が可能となり、画像やテキストがより滑らかに見える。
+
+代表的な例として、AppleのRetinaディスプレイがあり、DPRは2以上で従来のディスプレイよりも高精度な表示が可能となる。
+
+DPRが2であれば、レンダリングするピクセル数は4倍になり、DPRが3であれば、ピクセル数は9倍になる。
+
+そして、DPRが最も高いのは通常、スマートフォンといったモバイル機器であり、フレームレートの低下を招くことになる。
+
+#### デバイスピクセル比の処理
+
+画面のピクセル比率を取得するには、`window.devicePixelRatio`を使用し、レンダラーのピクセル比率を更新するには、`renderer.setPixelRatio()`を呼び出す。
+
+```js title="デバイスピクセル比の処理の実装例"
+// Math.min()によってピクセル比が2より上にならないように設定
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+```
+
+### フルスクリーン処理
+
+```js title="ダブルクリックでフルスクリーンにする実装例"
+window.addEventListener("dblclick", () => {
+  // ブラウザがフルスクリーンに対応していない場合はwebkitを使用
+  const fullscreenElement =
+    document.fullscreenElement || document.webkitFullscreenElement;
+
+  // フルスクリーンかどうか判定
+  if (!fullscreenElement) {
+    if (canvas.requestFullscreen) {
+      canvas.requestFullscreen();
+    } else if (canvas.webkitRequestFullscreen) {
+      canvas.webkitRequestFullscreen();
+    }
+  } else {
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    } else if (document.webkitExitFullscreen) {
+      document.webkitExitFullscreen();
+    }
+  }
+});
 ```
