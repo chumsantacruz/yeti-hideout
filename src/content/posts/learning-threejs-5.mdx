@@ -1,0 +1,252 @@
+---
+title: "three.js概論#3"
+description: "アニメーションについて"
+pubDate: 2024-06-07
+tag: ["three.js"]
+---
+
+import MDXTargetBlank from "../../components/MDXTargetBlank.astro";
+import Example1 from "../../components/example/introduction-3/1/Example.astro";
+import Example2 from "../../components/example/introduction-3/2/Example.astro";
+
+## アニメーション
+
+three.jsにおけるアニメーションはストップモーションアニメーションのように、一定の間隔でシーンの状態を変更し、レンダリングすることで実現される。
+
+PCモニターなどのディスプレイは、一般的に1秒間に60回画面を更新することができる。この更新の間隔をフレームレートと呼び、60fpsの場合、1フレームあたり約16.67msで画面を更新することになる。
+
+しかし、ディスプレイによっては60fps以上のフレームレートのものもあり、逆に60fps未満のものもある。
+
+そのため、フレームレートに関係なくアニメーションを実装するためには、`requestAnimationFrame`を使用することが推奨されている。
+
+### requestAnimationFrame
+
+`requestAnimationFrame`は、引数に指定した関数を次のフレームで実行する。
+
+そして、渡された関数内で再び`requestAnimationFrame`を呼び出すことで、関数が各フレームで実行され続ける。
+
+```javascript title="requestAnimationFrameの使用例"
+const tick = () => {
+  console.log("tick");
+
+  window.requestAnimationFrame(tick);
+};
+
+tick();
+```
+
+コンソールに`tick`と表示され続け、実行されるフレームレートが高いほど、より高い頻度で`tick`が表示される。
+
+つまり、フレームレートによってアニメーションの速度が変わってしまう。
+
+### フレームレートに依存しないアニメーション
+
+アニメーションをフレームレートに依存しないようにするためには、前回のフレームからの経過時間を取得し、それをアニメーションの進行度として扱うことが必要となる。
+
+```javascript title="フレームレートに依存しないアニメーションの実装例"
+let time = Date.now();
+
+const tick = () => {
+  // Time
+  const currentTime = Date.now();
+  // deltaTime: 前回のフレームからの経過時間
+  const deltaTime = currentTime - time;
+  time = currentTime;
+
+  // Update objects
+  mesh.rotation.y += 0.01 * deltaTime;
+
+  // ...
+};
+
+tick();
+```
+
+### Clock
+
+three.jsでは、`Clock`クラスを使用することで、簡単に経過時間を取得することができる。
+
+```javascript title="Clockの使用例"
+const clock = new THREE.Clock();
+
+const tick = () => {
+  // アニメーション開始時からの経過時間
+  const elapsedTime = clock.getElapsedTime();
+
+  // Update objects
+  camera.position.x = Math.cos(elapsedTime);
+  camera.position.y = Math.sin(elapsedTime);
+  camera.lookAt(0, 0, 0);
+
+  // ...
+};
+
+tick();
+```
+
+<Example1 />
+
+## カメラ
+
+three.jsには様々なタイプのカメラがある。
+
+### Camera
+
+<MDXTargetBlank
+  url={"https://threejs.org/docs/#api/en/cameras/Camera"}
+  title={"Camera"}
+/>
+Cameraクラスはいわゆる抽象クラスで、ほかのカメラに関するクラスはこのクラスを継承している。
+
+### StereoCamera
+
+<MDXTargetBlank
+  url={"https://threejs.org/docs/#api/en/cameras/StereoCamera"}
+  title={"StereoCamera"}
+/>
+
+StereoCameraは、私たちが「視差効果」と呼ぶ、脳を奥行きがあるかのように錯覚させる効果を生み出すために、目を模した2つのカメラを通してシーンをレンダリングするために使用される。結果を見るには、VRヘッドセットや赤青メガネなどの適切な機器が必要。
+
+### CubeCamera
+
+<MDXTargetBlank
+  url={"https://threejs.org/docs/#api/en/cameras/CubeCamera"}
+  title={"CubeCamera"}
+/>
+
+CubeCameraは、各方向（前方、後方、左方、右方、上方、下方）を向いたレンダーを取得し、周囲のレンダーを作成するために使用。反射用の環境マップやシャドウマップの作成にも使える。
+
+### PerspectiveCamera
+
+<MDXTargetBlank
+  url={"https://threejs.org/docs/#api/en/cameras/PerspectiveCamera"}
+  title={"PerspectiveCamera"}
+/>
+
+PerspectiveCameraは、遠近法を使った現実のカメラをシミュレートしたもの。
+
+PerspectiveCameraクラスのインスタンス化
+
+```javascript
+const camera = new THREE.PerspectiveCamera(
+  75, // fov: 視野角
+  window.innerWidth / window.innerHeight, // aspect: アスペクト比
+  1, // near: どれだけ近くのものをレンダリングするか
+  100, // far: どれだけ遠くのものをレンダリングするか
+);
+```
+
+### OrthographicCamera
+
+<MDXTargetBlank
+  url={"https://threejs.org/docs/#api/en/cameras/OrthographicCamera"}
+  title={"OrthographicCamera"}
+/>
+
+OrthographicCameraは、遠近感のないシーンの平行投影レンダリングを作成するために使用。カメラからの距離に関係なく、画面上の要素は同じサイズになる。
+
+視野角の代わりに、カメラが各方向（左、右、上、下）にどこまで見ることができるかを指定する。そして、PerspectiveCameraで行ったように、nearとfarの値を指定。
+
+```javascript
+// 比率を保つためにアスペクト比を使用する
+const aspectRatio = sizes.width / sizes.height;
+const camera = new THREE.OrthographicCamera(
+  -1 * aspectRatio, // left
+  1 * aspectRatio, // right
+  1, // top
+  -1, // bottom
+  0.1, // near
+  100, //
+);
+```
+
+## マウス位置をもとにカメラをコントロール
+
+```javascript
+// Cursor
+const cursor = {
+  x: 0,
+  y: 0,
+};
+
+window.addEventListener("mousemove", (event) => {
+  // カーソル位置の値が-0.5から+0.5になるように調整
+  cursor.x = event.clientX / sizes.width - 0.5;
+  // three.jsのy軸と合わせるために値を反転
+  cursor.y = -(event.clientY / sizes.height - 0.5);
+});
+
+// ...
+
+const tick = () => {
+  // ...
+
+  // y軸をもとに最大1回転するように調整
+  camera.position.x = Math.sin(cursorX * Math.PI * 2) * 2;
+  camera.position.z = Math.cos(cursorX * Math.PI * 2) * 2;
+  camera.position.y = cursorY * 3;
+  camera.lookAt(mesh.position);
+
+  // ...
+};
+```
+
+<Example2 />
+
+## ビルトインコントロール
+
+公式ドキュメントで見れば分かるが、three.jsにはあらかじめ用意されたコントロールがいくつかある。
+
+### OribitControls
+
+<MDXTargetBlank
+  url={"https://threejs.org/docs/#examples/en/controls/OrbitControls"}
+  title={"OribitControls"}
+/>
+
+一番使用する機会が多いであろうコントロール。画面ドラッグやスクロールを使用してカメラをコントロールできるようにする。
+
+OrbitControlsクラスは、標準の`THREE`変数からではなく、新たにインポートする必要がある。
+
+```javascript
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+
+const controls = new OrbitControls(camera, renderer.domElement);
+```
+
+### Target
+
+デフォルトではカメラはシーンの中心を見ているが、`Target`プロパティで変更することができる。
+
+このプロパティは`Vector3`でx,y,zプロパティを変更できる。
+
+```js
+// targetをy軸方向に移動
+controls.target.y = 2;
+// 自分自身を更新するためにupdate()メソッドを呼び出す
+controls.update();
+```
+
+### Dumping
+
+ダンピングは、加速度と摩擦の計算を追加することで、アニメーションを滑らかにする。
+
+正しく動作させるには、各フレームで`controls.update()`を呼び出して更新する必要がある。
+
+```js
+const controls = new OrbitControls(camera, renderer.domElement);
+
+// Dumpingを有効化
+controls.enableDamping = true;
+
+// ...
+
+const tick = () => {
+  // ...
+
+  // Update controls
+  controls.update();
+
+  // ...
+};
+```
