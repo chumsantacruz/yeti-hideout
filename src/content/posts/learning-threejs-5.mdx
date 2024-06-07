@@ -1,0 +1,86 @@
+---
+title: "three.js概論#3"
+description: "アニメーションについて"
+pubDate: 2024-06-07
+tag: ["three.js"]
+---
+
+import MDXTargetBlank from "../../components/MDXTargetBlank.astro";
+import Example from "../../components/example/introduction-2/Example.astro";
+
+## アニメーション
+
+three.jsにおけるアニメーションはストップモーションアニメーションのように、一定の間隔でシーンの状態を変更し、レンダリングすることで実現される。
+
+PCモニターなどのディスプレイは、一般的に1秒間に60回画面を更新することができる。この更新の間隔をフレームレートと呼び、60fpsの場合、1フレームあたり約16.67msで画面を更新することになる。
+
+しかし、ディスプレイによっては60fps以上のフレームレートのものもあり、逆に60fps未満のものもある。
+
+そのため、フレームレートに関係なくアニメーションを実装するためには、`requestAnimationFrame`を使用することが推奨されている。
+
+### requestAnimationFrame
+
+`requestAnimationFrame`は、引数に指定した関数を次のフレームで実行する。
+
+そして、渡された関数内で再び`requestAnimationFrame`を呼び出すことで、関数が各フレームで実行され続ける。
+
+```javascript title="requestAnimationFrameの使用例"
+const tick = () => {
+  console.log("tick");
+
+  window.requestAnimationFrame(tick);
+};
+
+tick();
+```
+
+コンソールに`tick`と表示され続け、実行されるフレームレートが高いほど、より高い頻度で`tick`が表示される。
+
+つまり、フレームレートによってアニメーションの速度が変わってしまう。
+
+### フレームレートに依存しないアニメーション
+
+アニメーションをフレームレートに依存しないようにするためには、前回のフレームからの経過時間を取得し、それをアニメーションの進行度として扱うことが必要となる。
+
+```javascript title="フレームレートに依存しないアニメーションの実装例"
+let time = Date.now();
+
+const tick = () => {
+  // Time
+  const currentTime = Date.now();
+  // deltaTime: 前回のフレームからの経過時間
+  const deltaTime = currentTime - time;
+  time = currentTime;
+
+  // Update objects
+  mesh.rotation.y += 0.01 * deltaTime;
+
+  // ...
+};
+
+tick();
+```
+
+### Clock
+
+three.jsでは、`Clock`クラスを使用することで、簡単に経過時間を取得することができる。
+
+```javascript title="Clockの使用例"
+const clock = new THREE.Clock();
+
+const tick = () => {
+  // アニメーション開始時からの経過時間
+  const elapsedTime = clock.getElapsedTime();
+
+  // Update objects
+  mesh.rotation.y = elapsedTime;
+
+  // ...
+};
+
+tick();
+```
+
+<Example />
+
+## カメラ

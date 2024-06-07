@@ -11,7 +11,7 @@ export default function Experience() {
     <>
       <mesh ref={cube}>
         <boxGeometry args={[1, 1, 1]} />
-        <meshBasicMaterial color={"0x00ff00"} />
+        <meshBasicMaterial color={"limegreen"} />
       </mesh>
     </>
   );
