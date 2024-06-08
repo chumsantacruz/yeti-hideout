@@ -1,0 +1,269 @@
+---
+title: "three.js概論#4"
+description: ""
+pubDate: 2024-06-10
+tag: ["three.js"]
+---
+
+import MDXTargetBlank from "../../components/MDXTargetBlank.astro";
+import Example1 from "../../components/example/introduction-4/1/Example.astro";
+import Example2 from "../../components/example/introduction-4/2/Example.astro";
+
+## Geometry
+
+three.jsではジオメトリは頂点（3D空間上の点座標）と面（それらの頂点を結んでサーフェスを作る三角形）で構成される。
+
+ジオメトリを使用して、メッシュを作成したり、パーティクルを形成することができる。
+
+また、頂点には位置情報だけでなく、UV座標や法線といったデータも格納できる。
+
+### 組み込みジオメトリ
+
+three.jsには多くの組み込みジオメトリが用意されている。
+
+- <MDXTargetBlank
+    url={"https://threejs.org/docs/#api/en/geometries/BoxGeometry"}
+    title={"BoxGeometry"}
+  />
+- <MDXTargetBlank
+    url={"https://threejs.org/docs/#api/en/geometries/PlaneGeometry"}
+    title={"PlaneGeometry"}
+  />
+- <MDXTargetBlank
+    url={"https://threejs.org/docs/#api/en/geometries/CircleGeometry"}
+    title={"CircleGeometry"}
+  />
+
+etc...
+
+これらは<MDXTargetBlank url={'https://threejs.org/docs/#api/en/core/BufferGeometry'} title={'BufferGeometry'}/>クラスを継承しており、
+`translate()`,`rotateX()`,`normalize()`などのメソッドが組み込まれている。
+
+### 独自のBufferGeometryを作成
+
+独自のバッファジオメトリを作成するには、まず空の`BufferGeometry`をインスタンス化する。以下では単純な三角形を作成していく。
+
+```js title="BufferGeometryをインスタンス化"
+// Create an empty BufferGeometry
+const geometry = new THREE.BufferGeometry();
+```
+
+`BufferGeometry`に頂点を追加するには、`Float32Array`が必要となる。
+
+`Float32Array`は、JavaScriptの型付き配列で、格納できるのは浮動小数点数だけで、配列の長さは固定となる。
+
+`Float32Array`を作成するには、まず長さを指定し、後からデータを格納していく。
+
+```js title='Float32Arrayを作成'
+const positionsArray = new Float32Array(9);
+
+// 1番目の頂点
+positionsArray[0] = 0;
+positionsArray[1] = 0;
+positionsArray[2] = 0;
+
+// 2番目の頂点
+positionsArray[3] = 0;
+positionsArray[4] = 1;
+positionsArray[5] = 0;
+
+// 3番目の頂点
+positionsArray[6] = 1;
+positionsArray[7] = 0;
+positionsArray[8] = 0;
+```
+
+もしくは配列を渡すこともできる
+
+```js
+const positionsArray = new Float32Array([0, 0, 0, 0, 1, 0, 1, 0, 0]);
+```
+
+この配列は1次元の配列で、それぞれの頂点のx,y,zを指定している。
+
+この配列を`BufferGeometry`に送るには、<MDXTargetBlank url={'https://threejs.org/docs/#api/en/core/BufferAttribute'} title={'BufferAttribute'}/>に変換する必要がある。
+
+1つ目の引数は型付き配列、2つ目の引数は1つの頂点属性を構成する値の数に対応する。この場合は、x,y,zの3つの値が必要なので3となる。
+
+```js
+const positionsAttribute = new THREE.BufferAttribute(positionsArray, 3);
+```
+
+作成した`positionsAttribute`を`BufferGeometry`に追加するには、`setAttribute()`メソッドを使用する。
+
+最初のパラメータは属性名、2番目のパラメータは値
+
+```js
+geometry.setAttribute("position", positionsAttribute);
+```
+
+<Example1 />
+
+### Index
+
+BufforGeometryの`index`プロパティを使うことで頂点を相互化することができる。
+
+ジオメトリの頂点をインデックスにすることで、データの効率化、メモリの節約、描画性能の向上、データの再利用性の向上、編集の容易さ、アルゴリズムの効率化など、多くの利点が得られる。
+
+## Texture
+
+テクスチャは、ジオメトリの表面に張り付けるイメージ、画像のこと。
+
+様々な種類のテクスチャがあり、ジオメトリの見た目にいろいろな効果を与えることができる。
+
+- カラーテクスチャ (Color Texture): オブジェクトの色やパターン。
+- アルファテクスチャ (Alpha Texture): オブジェクトの透明度。
+- バンプマップ (Bump Map): オブジェクトの表面の凹凸をシミュレート。
+- ノーマルマップ (Normal Map): バンプマップよりも精密に表面の凹凸をシミュレート。
+- ディスプレイスメントマップ (Displacement Map): 実際にジオメトリを変形させて凹凸を作る。
+- 環境マップ (Environment Map): 反射をシミュレート。
+- スペキュラーマップ (Specular Map): 特定の領域の光沢を制御。
+- ラフネスマップ (Roughness Map): 表面の粗さ。
+
+こんな感じで、いろんな役割のテクスチャがある。
+
+### テクスチャのロード
+
+three.jsの<MDXTargetBlank url={'https://threejs.org/docs/index.html#api/en/loaders/TextureLoader'} title={'TextureLoader'}/>を使って、テクスチャをロードする。
+
+```js
+const textureLoader = new THREE.TextureLoader();
+const texture = textureLoader.load("/hoge.jpg");
+// 色空間を修正
+texture.colorSpace = THREE.SRGBColorSpace;
+
+// マテリアルのmapプロパティでテクスチャを設定
+const material = new THREE.MeshBasicMaterial({ map: texture });
+```
+
+<Example2 />
+
+`TextureLoader`では、引数としてコールバック関数を渡すことで、以下のイベントに対して呼び出すことができる。
+
+```js
+const texture = textureLoader.load(
+  "/hoge.jpg",
+  () => {
+    console.log("ロード完了");
+  },
+  () => {
+    console.log("ロード進行中");
+  },
+  () => {
+    console.log("エラー");
+  },
+);
+```
+
+#### LoadingManager
+
+読み込みたい画像が複数あり、すべての読み込みが完了したときに通知されるようにしたい場合は、<MDXTargetBlank url={'https://threejs.org/docs/index.html#api/en/loaders/managers/LoadingManager'} title={'LoadingManager'} />を使用する。
+
+`LoadingManager`クラスのインスタンスを作成し、`TextureLoader`に渡す。
+
+```js
+const loadingManager = new THREE.LoadingManager();
+
+// 各イベントをリッスン
+loadingManager.onStart = () => {
+  console.log("loading started");
+};
+loadingManager.onLoad = () => {
+  console.log("loading finished");
+};
+loadingManager.onProgress = () => {
+  console.log("loading progressing");
+};
+loadingManager.onError = () => {
+  console.log("loading error");
+};
+
+const textureLoader = new THREE.TextureLoader(loadingManager);
+```
+
+### UVアンラッピング
+
+UVアンラッピング（UV Unwrapping）は、3Dモデルの表面を2D平面に展開し、テクスチャを適用できるようにするプロセス。
+
+UVとは、3Dモデルのテクスチャマッピングに使用される2次元の座標系を指す。具体的には、UV座標は3Dモデルの表面上の各点を2Dテクスチャ画像の特定の位置に対応付けるために使用される。
+
+`geometry.attributes.uv`でジオメトリのUV2D座標を確認できる。
+
+### テクスチャの変形
+
+#### Repeat
+
+テクスチャをリピートさせるにはrepeatプロパティを使う。
+
+また、テクスチャがリピートするように`THREE.RepeatWrapping`を指定する必要がある。
+
+```js
+const colorTexture = textureLoader.load("hoge.jpg");
+colorTexture.colorSpace = THREE.SRGBColorSpace;
+colorTexture.repeat.x = 2;
+colorTexture.repeat.y = 3;
+
+colorTexture.wrapS = THREE.RepeatWrapping;
+colorTexture.wrapT = THREE.RepeatWrapping;
+```
+
+ほかに指定できるオプションは、<br />`THREE.ClampToEdgeWrapping`(デフォルト),`THREE.MirroredRepeatWrapping`がある。
+
+#### Offset
+
+`offset`プロパティをつかって、UV座標をオフセットすることができる。
+
+```js
+colorTexture.offset.x = 0.5;
+colorTexture.offset.y = 0.5;
+```
+
+#### Rotation
+
+テクスチャの回転
+
+回転のピボットを変更する場合は、`center`プロパティを使う。
+
+```js
+colorTexture.rotation = Math.PI * 0.25;
+colorTexture.center.x = 0.5;
+colorTexture.center.y = 0.5;
+```
+
+#### FilterlingとMipmapping
+
+`Mipmapping`とは、コンピュータグラフィックスにおいてテクスチャマッピングの品質とパフォーマンスを向上させるための技術。この技術は、3Dオブジェクトにテクスチャ（画像）を効率的に貼り付けるために使用される。
+
+オリジナルのテクスチャから、1x1のテクスチャになるまで、テクスチャの半分の小さいバージョンを何度も作成する。これらのテクスチャのバリエーションはすべてGPUに送られ、GPUはテクスチャの最も適切なバージョンを選択する。
+
+作成されたテクスチャのバリエーションはすべてGPUに送られ、GPUはテクスチャのもっとも最適なものを選択する。
+
+three.jsでは、使用するフィルターアルゴリズムを設定することで、処理方法を変更できる。
+
+#### Minification filter
+
+minification filter(最小化フィルタ)は、テクスチャのピクセルがレンダリングのピクセルよりも小さい時(テクスチャが面に対して大きい時)の処理方法。
+
+`minFilter`プロパティを使用する。設定できる値は以下の6つ
+
+- `THREE.NearestFilter`
+- `THREE.LinearFilter`
+- `THREE.NearestMipmapNearestFilter`
+- `THREE.NearestMipmapLinearFilter`
+- `THREE.LinearMipmapNearestFilter`
+- `THREE.LinearMipmapLinearFilter`(デフォルト)
+
+#### Magnification filter
+
+magnification filter(拡大フィルタ)は、テクスチャのピクセルがレンダリングのピクセルよりも大きい場合(テクスチャが面に対して小さい時)の処理方法。
+
+`magFilter`プロパティを使用。設定できる値は以下の2つ
+
+- `THREE.NearestFilter`
+- `THREE.LinearFilter`(デフォルト)
+
+### 解像度
+
+使用するテクスチャはmipmappingによって、バリエーションが自動生成されるため、画像の解像度はできるだけ小さくしたほうがパフォーマンスが改善される。
+
+また、2で割り切れるように2のべき乗サイズの解像度(512, 1024, 2048)を使用したほうがいい。幅や高さが2のべき乗とは異なるテクスチャを使用している場合、three.jsは最も近い2のべき乗の値に伸ばそうとする。

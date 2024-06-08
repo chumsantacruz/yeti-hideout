@@ -5,7 +5,7 @@ import PostsLayout from "../../layouts/PostsLayout.astro";
 
 export const getStaticPaths = (async({paginate}) => {
   const posts = await getAllPosts()
-  return paginate(posts, {pageSize: 20});
+  return paginate(posts, {pageSize: 10});
 }) satisfies GetStaticPaths;
 
 const {page} = Astro.props
