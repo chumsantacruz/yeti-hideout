@@ -1,12 +1,14 @@
 ---
 title: "three.js概論#6"
-description: "シャドウ"
+description: "シャドウとパーティクルについて"
 pubDate: 2024-06-11
 tag: ["three.js"]
 ---
 
 import MDXTargetBlank from "../../components/MDXTargetBlank.astro";
 import Example from "../../components/example/introduction-6/1/Example.astro";
+import Example2 from "../../components/example/introduction-6/2/Example.astro";
+import Example3 from "../../components/example/introduction-6/3/Example.astro";
 
 ## Shadow
 
@@ -130,3 +132,72 @@ renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 ```
 
 <Example />
+
+## Particle
+
+three.jsにおけるパーティクルは、3Dグラフィックスのシーン内で小さな点や粒子のようなオブジェクトを大量に描画するために使用される。パーティクルは、煙、火花、星、雨などのエフェクトを表現するのに適しており、リアルなシミュレーションや視覚効果を作り出すために広く利用される。
+
+パーティクルのメリットは、フレームレートを落とさずに画面上に何十万ものパーティクルを配置できること。
+
+欠点は、各パーティクルを構成する平面が常にカメラに向かっているところ。
+
+パーティクルの作成には、`BufferGeometry`、`PointsMaterial`、`Points`を使用する。
+
+### Geometry
+
+基本的なジオメトリを使用でき、この場合はジオメトリの各頂点がパーティクルになる。
+
+```js
+const particlesGeometry = new THREE.SphereGeometry(1, 32, 32);
+```
+
+### PointsMaterial
+
+- <MDXTargetBlank
+    url={"https://threejs.org/docs/#api/en/materials/PointsMaterial"}
+    title={"PointsMaterial"}
+  />
+  という特別なマテリアルを使用する。
+
+`PointsMaterial`は、パーティクルのサイズを制御する`size`や、パーティクルに遠近感を出す`sizeAttenuation`などの、パーティクル専用の固有のプロパティが用意されている。
+
+```js
+const particlesMaterial = new THREE.PointsMaterial({
+  size: 0.02,
+  sizeAttenuation: true,
+});
+```
+
+### Points
+
+最後に`Mesh`と同じ方法で、<MDXTargetBlank url={'https://threejs.org/docs/#api/en/objects/Points'} title={'Points'}/>クラスを使用して、パーティクルを作成する。
+
+```js
+const particles = new THREE.Points(particlesGeometry, particlesMaterial);
+scene.add(particles);
+```
+
+<Example2 />
+
+### Custom geometry
+
+組み込みジオメトリではなく、カスタムジオメトリを作成するには、`BufferGeometry`を使用し、`position`属性を追加する。
+
+```js
+const particlesGeometry = new THREE.BufferGeometry();
+const count = 500;
+
+const positions = new Float32Arry(count * 3);
+
+for (let i = 0; i < count * 3; i++) {
+  //値が - 5.0から5.0になるように調整
+  positions[i] = (Math.random() - 0.5) * 10;
+}
+
+particlesGeometry.setAttribute(
+  "position",
+  new THREE.BufferAttribute(positions, 3),
+);
+```
+
+<Example3 />

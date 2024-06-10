@@ -9,7 +9,7 @@ export default function Experience() {
           <bufferAttribute
             attach="attributes-position"
             array={positionsArray}
-            count={positionsArray / 3}
+            count={3}
             itemSize={3}
           />
         </bufferGeometry>
