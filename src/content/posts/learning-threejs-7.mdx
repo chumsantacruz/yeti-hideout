@@ -1,6 +1,6 @@
 ---
 title: "three.js概論#5"
-description: "マテリアルについて"
+description: "マテリアルとライトについて"
 pubDate: 2024-06-11
 tag: ["three.js"]
 ---
@@ -243,3 +243,162 @@ material.roughness = 0.65;
 ```js
 const material = new THREE.MeshPhysicalMaterial();
 ```
+
+## ライト
+
+マテリアルによっては、ライトが必要なものがある。ライトを追加することで、物体の表面に影をつけたり、光の反射をシミュレートすることができる。
+
+シーンにライトを追加するには、クラスをインスタンス化してシーンに追加する。
+
+ライトには、`AmbientLight`、`DirectionalLight`、`PointLight`、`SpotLight`などがある。
+
+### AmbientLight
+
+- <MDXTargetBlank
+    url={"https://threejs.org/docs/#api/en/lights/AmbientLight"}
+    title={"AmbientLight"}
+  />
+  は環境光を表現するライト。全体的に均等に光を当てる。
+
+最初の引数に色、2番目の引数に光の強さを指定する。
+
+```js
+const ambientLight = new THREE.AmbientLight(0xffffff, 1);
+```
+
+### DirectionalLight
+
+- <MDXTargetBlank
+    url={"https://threejs.org/docs/#api/en/lights/DirectionalLight"}
+    title={"DirectionalLight"}
+  />
+  は平行光源を表現するライト。光源の位置が無限遠にあると仮定して、全体的に均等に光を当てる。太陽光みたいなイメージ。
+
+```js
+const directionalLight = new THREE.DirectionalLight(0x00fffc, 0.9);
+```
+
+### HemisphereLight
+
+- <MDXTargetBlank
+    url={"https://threejs.org/docs/#api/en/lights/HemisphereLight"}
+    title={"HemisphereLight"}
+  />
+  は半球光源を表現するライト。上方向からの光と下方向からの光を指定することができる。
+
+最初の引数に上方向の色、2番目の引数に下方向の色、3番目の引数に光の強さを指定する。
+
+```js
+const hemisphereLight = new THREE.HemisphereLight(0xff0000, 0x0000ff, 0.9);
+```
+
+### PointLight
+
+- <MDXTargetBlank
+    url={"https://threejs.org/docs/#api/en/lights/PointLight"}
+    title={"PointLight"}
+  />
+  は点光源を表現するライト。光源の位置によって光の強さが変わる。電球のようなイメージ。
+
+最初の引数に色、2番目の引数に光の強さ、3番目の引数にライトの最大範囲(`0`の場合は制限なし)、4番目の引数に減衰率を指定する。
+
+```js
+const pointLight = new THREE.PointLight(0xff9000, 1.5, 0, 2);
+```
+
+### RectAreaLight
+
+- <MDXTargetBlank
+    url={"https://threejs.org/docs/#api/en/lights/RectAreaLight"}
+    title={"RectAreaLight"}
+  />
+  は長方形のライトを表現するライト。明るい窓やテレビの画面などの光源を表現するのに適している。
+
+このライトは`MeshStandardMaterial`と`MeshPhysicalMaterial`のみで動作する。
+
+最初の引数に色、2番目の引数に光の強さ、3番目の引数にライトの幅、4番目の引数にライトの高さを指定する。
+
+```js
+const rectAreaLight = new THREE.RectAreaLight(0x4e00ff, 6, 1, 1);
+```
+
+### SpotLight
+
+- <MDXTargetBlank
+    url={"https://threejs.org/docs/#api/en/lights/SpotLight"}
+    title={"SpotLight"}
+  />
+  はスポットライトを表現するライト。点から始まり、特定の方向に向かって円錐状に光を当てる。懐中電灯のようなイメージ。
+
+  パラメータは以下の通り。
+
+  - `color`: 色
+  - `intensity`: 光の強さ
+  - `distance`: ライトの最大範囲(`0`の場合は制限なし)
+  - `angle`: 光の角度
+  - `penumbra`: 光の柔らかさ
+  - `decay`: 減衰率
+
+```js
+const spotLight = new THREE.SpotLight(
+  0x78ff00,
+  4.5,
+  10,
+  Math.PI * 0.1,
+  0.25,
+  1,
+);
+```
+
+### Targetプロパティ
+
+`SpotLight`や`DirectionalLight`には、`target`プロパティがあり、ライトのターゲット(デフォルトは`(0, 0, 0)`)を指定できる。ライトの方向を変えるには、ターゲットの位置を変更する。
+
+`position`,`rotation`,`scale`は変換行列と呼ばれるものにコンパイルされ、それが最終的な位置、回転、スケールになる。
+
+この処理は、three.jsの内部でシーン内にあるオブジェクトに対して行われるため、`target`の位置を変更する際は、それ自体をシーンに追加する必要がある。
+
+```js
+spotLight.target.position.x = -0.75;
+scene.add(spotLight.target);
+```
+
+### Helper
+
+ライトの位置や方向を可視化するために、`Helper`クラスを使用することができる。
+
+- <MDXTargetBlank
+    url={"https://threejs.org/docs/#api/en/helpers/SpotLightHelper"}
+    title={"SpotLightHelper"}
+  />
+- <MDXTargetBlank
+    url={"https://threejs.org/docs/#api/en/helpers/DirectionalLightHelper"}
+    title={"DirectionalLightHelper"}
+  />
+- <MDXTargetBlank
+    url={"https://threejs.org/docs/#api/en/helpers/PointLightHelper"}
+    title={"PointLightHelper"}
+  />
+- <MDXTargetBlank
+    url={"https://threejs.org/docs/#api/en/helpers/HemisphereLightHelper"}
+    title={"HemisphereLightHelper"}
+  />
+- <MDXTargetBlank
+    url={
+      "https://threejs.org/docs/index.html#examples/en/helpers/RectAreaLightHelper"
+    }
+    title={"RectAreaLightHelper"}
+  />
+
+```js
+const spotLightHelper = new THREE.SpotLightHelper(spotLight);
+scene.add(spotLightHelper);
+```
+
+### パフォーマンス
+
+ライトは、シーンをよりリアルに見せるために使用されるが、ライトの数が多いほど計算量が増加しパフォーマンスが低下する。そのため、ライトの数を最小限に抑えることが重要。
+
+### ベイキング
+
+ライトの数を減らす方法として、ベイキングという手法がある。ベイキングとは、ライトの影をテクスチャに保存することで、ライトの数を減らしパフォーマンスを向上させる手法。
