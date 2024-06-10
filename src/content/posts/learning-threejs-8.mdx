@@ -1,0 +1,129 @@
+---
+title: "three.js概論#6"
+description: "シャドウ"
+pubDate: 2024-06-11
+tag: ["three.js"]
+---
+
+import MDXTargetBlank from "../../components/MDXTargetBlank.astro";
+
+## Shadow
+
+three.jsには、影を実装するための組み込みのソリューションが用意されている。
+
+### 仕組み
+
+three.jsは、1つのレンダリングを行う際、まず影を落とすと想定されるライトごとにレンダリングを行う。これらのレンダリングは、ライトの見え方をカメラのようにシミュレートする。これらのライトのレンダリング中に、`MeshDepthMaterial`がすべてのメッシュのマテリアルを置き換える。
+
+結果はテクスチャとシャドウマップとして保存される。
+
+シャドウマップは直接見ることはできないが、シャドウを受けるオブジェクトのマテリアルに適用され、ジオメトリに投影される。
+
+<MDXTargetBlank
+  url={"https://threejs.org/examples/webgl_shadowmap_viewer.html"}
+  title={"シャドウマップのサンプル"}
+/>
+
+### 影を有効にする
+
+まず、`renderer`の`shadowMap`プロパティを有効にする。
+
+```js
+renderer.shadowMap.enabled = true;
+```
+
+そして、影を落とすオブジェクトに`castShadow`プロパティを、影を受けるオブジェクトには`receiveShadow`プロパティを設定する。
+
+```js
+mesh.castShadow = true;
+mesh.receiveShadow = true;
+```
+
+最後に、ライトの`castShadow`プロパティを設定する。
+
+`PointLight`, `SpotLight`, `DirectionalLight`の3つのライトのみが影をサポートしている。
+
+```js
+directionalLight.castShadow = true;
+```
+
+### シャドウマップの設定
+
+three.jsは各ライトに対してシャドウマップを生成し、それを使用して影を描画する。
+
+このシャドウマップには、ライトの`shadow`プロパティを使ってアクセスすることができる。
+
+```js
+directionalLight.castShadow = true;
+console.log(directionalLight.shadow);
+```
+
+#### レンダーサイズ
+
+シャドウマップの解像度は、`shadow.mapSize`プロパティの`width`と`height`プロパティで設定できる。
+
+デフォルトは`512x512`で2のべき乗の値にする必要がある。
+
+```js
+directionalLight.shadow.mapSize.width = 1024;
+directionalLight.shadow.mapSize.height = 1024;
+```
+
+#### Near/Far
+
+シャドウマップのレンダリングにはカメラ使っており、このカメラは他のカメラと同じプロパティを持つので、`near`と`far`プロパティを使って影がどこまで表示されるかを設定できる。
+
+また、<MDXTargetBlank url={'https://threejs.org/docs/#api/en/helpers/CameraHelper'} title={'CameraHelper'}/>を、影のカメラに適用することで、影のカメラの位置や`near`、`far`を確認することができる。
+
+```js
+// カメラヘルパーを作成
+const directionalLightCameraHelper = new THREE.CameraHelper(
+  directionalLight.shadow.camera,
+);
+scene.add(directionalLightCameraHelper);
+
+// カメラヘルパーを非表示にする場合
+directionalLightCameraHelper.visible = false;
+
+// シャドウマップのnear/farを設定
+directionalLight.shadow.camera.near = 1;
+directionalLight.shadow.camera.far = 6;
+```
+
+#### カメラの範囲
+
+`DirectionalLight`のシャドウカメラは、デフォルトで`OrthographicCamera`を使用している。
+
+そのため、`left`, `right`, `top`, `bottom`プロパティを使って、シャドウカメラの範囲を設定できる。
+
+範囲が小さいほど、シャドウマップの解像度が高くなる。
+
+```js
+directionalLight.shadow.camera.top = 2;
+directionalLight.shadow.camera.right = 2;
+directionalLight.shadow.camera.bottom = -2;
+directionalLight.shadow.camera.left = -2;
+```
+
+#### ぼかし
+
+`radius`プロパティを使って、シャドウマップのぼかしを設定できる。
+
+```js
+directionalLight.shadow.radius = 10;
+```
+
+#### シャドウマップのアルゴリズム
+
+シャドウマップには異なる種類のアルゴリズムを適用することができる。
+
+- `BasicShadowMap`: デフォルトのシャドウマップ。速度が速いが、品質が低い。
+- `PCFShadowMap`: ピクセルごとのぼかしを適用することで、シャドウの品質を向上させる。
+- `PCFSoftShadowMap`: `PCFShadowMap`よりもぼかしを強くすることで、より柔らかい影を描画する。
+- `VSMShadowMap`: バリアンスシャドウマップ。シャドウマップの品質を向上させる。
+
+変更するには、`shadowMap.type`プロパティを設定する。
+
+```js
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+```
