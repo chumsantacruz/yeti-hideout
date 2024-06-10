@@ -1,0 +1,245 @@
+---
+title: "three.js概論#5"
+description: "マテリアルについて"
+pubDate: 2024-06-11
+tag: ["three.js"]
+---
+
+import MDXTargetBlank from "../../components/MDXTargetBlank.astro";
+
+## Material
+
+マテリアルは、ジオメトリの各可視ピクセルに対してどのような色や質感を持たせるかを定義する。
+
+各ピクセルの色を決めるアルゴリズムは、シェーダーと呼ばれるプログラムで記述される。
+
+シェーダーの作成は、`WebGL`と`three.js`の最も難しい部分の1つであるが、`three.js`には多くの組み込みマテリアルが用意されているため、それを使用する場合は自分でシェーダーを書く必要はない。
+
+### MeshBasicMaterial
+
+- <MDXTargetBlank
+    url={"https://threejs.org/docs/#api/en/materials/MeshBasicMaterial"}
+    title={"MeshBasicMaterial"}
+  />
+  は最も基本的なマテリアル。
+
+```js
+const material = new THREE.MeshBasicMaterial({
+  map: texture,
+});
+
+// または
+const material = new THREE.MeshBasicMaterial();
+material.map = texture;
+```
+
+#### プロパティ
+
+- `Map`：テクスチャを指定する。
+
+  ```js
+  const material = new THREE.MeshBasicMaterial({ map: texture });
+  ```
+
+  - `aoMap`:アンビエントオクルージョンマップを指定する。AOは、物体表面の微細な凹凸や隙間による影の濃淡を表現することで、より現実的で立体感を持たせるために使用される。
+
+    ```js
+    material.aoMap = ambientOcclusionTexture;
+    ```
+
+  - `diplacementMap`:変位マップを指定する。変位マップは、ジオメトリの頂点を変位させるために使用される。
+
+    ```js
+    material.displacementMap = heightTexture;
+    ```
+
+  - `metalnessMap`:金属マップを指定する。金属マップは、物体の金属感を表現するために使用される。
+
+    ```js
+    material.metalnessMap = metalnessTexture;
+    ```
+
+  - `roughnessMap`: 粗さマップを指定する。粗さマップは、物体の表面の粗さを表現するために使用される。
+
+    ```js
+    material.roughnessMap = roughnessTexture;
+    ```
+
+  - `normalMap`: 法線マップを指定する。法線マップは、物体の表面の凹凸を表現するために使用される。
+
+    ```js
+    material.normalMap = normalTexture;
+    ```
+
+  - `alphaMap`: アルファマップを指定する。アルファマップは、物体の透明度を表現するために使用される。
+
+    ```js
+    material.alphaMap = alphaTexture;
+    ```
+
+- `Color`：色を指定する。プロパティを直接変更する場合は、`Color`クラスを使用する必要がある。
+
+  ```js
+  const material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+
+  // または
+  const material = new THREE.MeshBasicMaterial();
+  material.color = new THREE.Color(0xff0000);
+  ```
+
+- `Wireframe`：ワイヤーフレーム表示にする。
+
+  ```js
+  material.wireframe = true;
+  ```
+
+- `Opacity`: 透明度を指定する。透明度を変更する場合は、`transparent`プロパティを`true`に設定する必要がある。
+
+  ```js
+  material.opacity = 0.5;
+  material.transparent = true;
+  ```
+
+- `AlphaMap`：アルファマップを指定する。テクスチャで透明度を指定する場合に使用。
+
+  ```js
+  const material = new THREE.MeshBasicMaterial({ alphaMap: texture });
+  ```
+
+- `Side`：面の表示方法を指定する。デフォルトは前面を表示する`THREE.FrontSide`。後面を表示する場合は`THREE.BackSide`、両面を表示する場合は`THREE.DoubleSide`を指定する。
+
+  ```js
+  material.side = THREE.DoubleSide;
+  ```
+
+### MeshNormalMaterial
+
+- <MDXTargetBlank
+    url={"https://threejs.org/docs/#api/en/materials/MeshNormalMaterial"}
+    title={"MeshNormalMaterial"}
+  />
+  は法線ベクトルを色に変換するマテリアル。
+
+法線(`Normal`)とは、特定の点における曲線や曲面に垂直（直交）する直線やベクトルのこと。法線は、曲線や曲面の形状や方向性を理解するために重要な役割を果たし、反射や屈折の計算などに使用される。
+
+```js
+const material = new THREE.MeshNormalMaterial();
+```
+
+### MeshMatcapMaterial
+
+- <MDXTargetBlank
+    url={"https://threejs.org/docs/#api/en/materials/MeshMatcapMaterial"}
+    title={"MeshMatcapMaterial"}
+  />
+  は<MDXTargetBlank
+    url={"https://github.com/nidorx/matcaps"}
+    title={"Matcap"}
+  />
+  と呼ばれる球面反射マップを使用するマテリアル。カメラに対する法線ベクトルの方向に応じて、球面反射マップの色が適用される。
+
+```js
+const material = new THREE.MeshMatcapMaterial();
+material.matcap = matcapTexture;
+```
+
+### MeshDepthMaterial
+
+- <MDXTargetBlank
+    url={"https://threejs.org/docs/#api/en/materials/MeshDepthMaterial"}
+    title={"MeshDepthMaterial"}
+  />
+  は深度によって色を変えるマテリアル。カメラと近いほど白く、遠いほど黒くなる。
+
+このマテリアルは、深度をテクスチャに保存するために使用され、影の処理などのために使用できる。
+
+```js
+const material = new THREE.MeshDepthMaterial();
+```
+
+**--- 以下のマテリアルからはライトが必要 ---**
+
+### MeshLambertMaterial
+
+- <MDXTargetBlank
+    url={"https://threejs.org/docs/#api/en/materials/MeshLambertMaterial"}
+    title={"MeshLambertMaterial"}
+  />
+  は非物理ベースのランバート反射をシミュレートするマテリアル。光沢のある表面を表現することはできない。
+
+このマテリアルは他のライトを必要とするマテリアルと比べて、計算量が少ないため、パフォーマンスが向上する。
+
+```js
+const material = new THREE.MeshLambertMaterial();
+```
+
+### MeshPhongMaterial
+
+- <MDXTargetBlank
+    url={"https://threejs.org/docs/#api/en/materials/MeshPhongMaterial"}
+    title={"MeshPhongMaterial"}
+  />
+  は非物理ベースのフォン反射をシミュレートするマテリアル。光沢のある表面を表現することができる。
+
+```js
+const material = new THREE.MeshPhongMaterial();
+
+// 光の反射を制御
+material.shininess = 100;
+
+// 光の反射の色を制御
+material.specular = new THREE.Color(0x1188ff);
+```
+
+### MeshToonMaterial
+
+- <MDXTargetBlank
+    url={"https://threejs.org/docs/#api/en/materials/MeshToonMaterial"}
+    title={"MeshToonMaterial"}
+  />
+  はトゥーンシェーディングをシミュレートするマテリアル。
+
+```js
+const material = new THREE.MeshToonMaterial();
+```
+
+### MeshStandardMaterial
+
+- <MDXTargetBlank
+    url={"https://threejs.org/docs/#api/en/materials/MeshStandardMaterial"}
+    title={"MeshStandardMaterial"}
+  />
+  は物理ベースレンダリング（PBR）をシミュレートするマテリアル。粗さや金属感などを表現することができる。
+
+```js
+const material = new THREE.MeshStandardMaterial();
+
+// 金属感を制御
+material.metalness = 0.45;
+
+// 粗さを制御
+material.roughness = 0.65;
+```
+
+### MeshPhysicalMaterial
+
+- <MDXTargetBlank
+    url={"https://threejs.org/docs/#api/en/materials/MeshPhysicalMaterial"}
+    title={"MeshPhysicalMaterial"}
+  />
+  は物理ベースレンダリング（PBR）をシミュレートするマテリアル。`MeshStandardMaterial`よりもさらに高度な物理ベースレンダリングを行う。
+
+  パフォーマンスが低いため、高度な物理ベースレンダリングが必要な場合にのみ使用したほうがいい。
+
+  以下のようなプロパティが追加されている。
+
+  - `Anisotropy`：異方性を制御する。異方性は、物体の表面の方向によって反射の強さが変わる性質。
+  - `Clearcoat`：クリアコートを制御する。クリアコートは、物体の表面にコーティングされた透明な薄膜のこと。
+  - `Iridescence`: 虹色効果を制御する。虹色効果は、物体の表面の微細な凹凸や屈折率の違いによって生じる色の変化。シャボン玉とか油膜のような色の変化。
+  - `Sheen`：布やファブリック素材の表現に使用。
+  - `Transmission`：透過率を制御する。透過率は、物体が光を透過する度合いのこと。
+  - `ior`: 屈折率を制御する。屈折率は、光が物体の表面に入射した際に、どのくらい曲がるかを表す値。
+
+```js
+const material = new THREE.MeshPhysicalMaterial();
+```
