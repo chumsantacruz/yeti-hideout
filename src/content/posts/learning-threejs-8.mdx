@@ -224,6 +224,21 @@ particlesMaterial.depthWrite = false;
 particlesMaterial.blending = THREE.AdditiveBlending;
 ```
 
+### 頂点カラー
+
+各パーティクルに色を設定するには、`color`属性を使用する。
+
+```js
+const colors = new Float32Array(count * 3);
+for (let i = 0; i < count * 3; i++) {
+  colors[i] = Math.random();
+}
+particlesGeometry.setAttribute("color", new THREE.BufferAttribute(colors, 3));
+
+// マテリアルの頂点カラーを有効にする
+particlesMaterial.vertexColors = true;
+```
+
 ### パーティクルのアニメーション
 
 #### Attributesを更新してアニメーションさせる
