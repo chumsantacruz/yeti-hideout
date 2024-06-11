@@ -9,6 +9,7 @@ import MDXTargetBlank from "../../components/MDXTargetBlank.astro";
 import Example from "../../components/example/introduction-6/1/Example.astro";
 import Example2 from "../../components/example/introduction-6/2/Example.astro";
 import Example3 from "../../components/example/introduction-6/3/Example.astro";
+import Example4 from "../../components/example/introduction-6/4/Example.astro";
 
 ## Shadow
 
@@ -201,3 +202,46 @@ particlesGeometry.setAttribute(
 ```
 
 <Example3 />
+
+### Color, map, alpha map
+
+`PointsMaterial`には、パーティクルの色を設定する`color`プロパティや、テクスチャを設定する`map`プロパティ、透明度を設定する`alphaMap`プロパティなどがある。
+
+```js
+// パーティクルの色を設定
+PointsMaterial.color = new THREE.Color("#ff88cc");
+
+// パーティクルにテクスチャを設定
+const textureLoader = new THREE.TextureLoader();
+const particleTexture = textureLoader.load("hoge.png");
+particlesMaterial.transparent = true;
+particlesMaterial.alphaMap = particleTexture;
+
+// パーティクルの深度書き込みを無効にして、他のパーティクルの後ろに隠れないようにする
+particlesMaterial.depthWrite = false;
+
+// パーティクルのブレンディングを設定
+particlesMaterial.blending = THREE.AdditiveBlending;
+```
+
+### パーティクルのアニメーション
+
+#### Attributesを更新してアニメーションさせる
+
+各頂点を更新するには、`position`属性を更新する。
+
+```js
+for (let i = 0; i < count; i++) {
+  let i3 = i * 3;
+
+  const x = particlesGeometry.attributes.position.array[i3];
+  particlesGeometry.attributes.position.array[i3 + 1] = Math.sin(
+    elapsedTime + x,
+  );
+}
+
+// ジオメトリの更新を通知
+particlesGeometry.attributes.position.needsUpdate = true;
+```
+
+<Example4 />
