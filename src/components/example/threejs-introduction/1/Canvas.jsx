@@ -1,16 +1,17 @@
 import { Canvas } from "@react-three/fiber";
-import Experience from "./Experience";
+import Example from "./Example";
 
-export default function Test() {
+export default function ExampleCanvas({ example }) {
   return (
     <Canvas
       camera={{
         fov: 45,
         near: 0.1,
         far: 1000,
+        position: [0, 3, 0],
       }}
     >
-      <Experience />
+      <Example example={example} />
     </Canvas>
   );
 }

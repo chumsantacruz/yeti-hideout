@@ -1,15 +1,12 @@
 ---
 title: "three.js概論#6"
 description: "シャドウとパーティクルについて"
-pubDate: 2024-06-12
+pubDate: 2024-06-11 18:00:00
 tag: ["three.js"]
 ---
 
 import MDXTargetBlank from "../../components/mdx/MDXTargetBlank.astro";
-import Example from "../../components/example/introduction-6/1/Example.astro";
-import Example2 from "../../components/example/introduction-6/2/Example.astro";
-import Example3 from "../../components/example/introduction-6/3/Example.astro";
-import Example4 from "../../components/example/introduction-6/4/Example.astro";
+import Example from "../../components/example/threejs-introduction/6/Example.astro";
 
 ## Shadow
 
@@ -132,7 +129,7 @@ directionalLight.shadow.radius = 10;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 ```
 
-<Example />
+<Example example={1} />
 
 ## Particle
 
@@ -178,7 +175,7 @@ const particles = new THREE.Points(particlesGeometry, particlesMaterial);
 scene.add(particles);
 ```
 
-<Example2 />
+<Example example={2} />
 
 ### Custom geometry
 
@@ -201,7 +198,7 @@ particlesGeometry.setAttribute(
 );
 ```
 
-<Example3 />
+<Example example={3} />
 
 ### Color, map, alpha map
 
@@ -259,4 +256,4 @@ for (let i = 0; i < count; i++) {
 particlesGeometry.attributes.position.needsUpdate = true;
 ```
 
-<Example4 />
+<Example example={4} />

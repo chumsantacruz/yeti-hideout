@@ -1,9 +1,8 @@
 ---
 import Canvas from "./Canvas";
-
-const { number } = Astro.props;
+const {example} = Astro.props;
 ---
 
 <div class="r3f aspect-video touch-none">
-  <Canvas client:only="react" number={number} />
+  <Canvas client:only="react" example={example}/>
 </div>

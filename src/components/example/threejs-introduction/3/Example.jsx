@@ -1,7 +1,7 @@
 import { useFrame, useThree } from "@react-three/fiber";
 import { useEffect, useState } from "react";
 
-export default function ExampleContainer({ number }) {
+export default function ExampleContainer({ example }) {
   const Example01 = () => {
     const { camera } = useThree();
     useFrame(({ clock }) => {
@@ -49,9 +49,9 @@ export default function ExampleContainer({ number }) {
     );
   };
 
-  if (number === 1) {
+  if (example === 1) {
     return <Example01 />;
-  } else if (number === 2) {
+  } else if (example === 2) {
     return <Example02 />;
   }
 }

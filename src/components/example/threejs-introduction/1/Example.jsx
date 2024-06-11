@@ -1,7 +1,7 @@
 import { useFrame } from "@react-three/fiber";
 import { useRef } from "react";
 
-export default function ExampleContainer({ number }) {
+export default function ExampleContainer({ example }) {
   const Example01 = () => {
     const cube = useRef();
     useFrame(() => {
@@ -18,7 +18,7 @@ export default function ExampleContainer({ number }) {
     );
   };
 
-  if (number === 1) {
+  if (example === 1) {
     return <Example01 />;
   }
 }
