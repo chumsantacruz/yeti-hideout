@@ -5,9 +5,8 @@ pubDate: 2024-06-09
 tag: ["three.js"]
 ---
 
-import MDXTargetBlank from "../../components/MDXTargetBlank.astro";
-import Example1 from "../../components/example/introduction-3/1/Example.astro";
-import Example2 from "../../components/example/introduction-3/2/Example.astro";
+import MDXTargetBlank from "../../components/mdx/MDXTargetBlank.astro";
+import Example from "../../components/example/introduction-3/1/Example.astro";
 
 ## アニメーション
 
@@ -84,7 +83,7 @@ const tick = () => {
 tick();
 ```
 
-<Example1 />
+<Example number={1} />
 
 ## カメラ
 
@@ -191,7 +190,7 @@ const tick = () => {
 };
 ```
 
-<Example2 />
+<Example number={2} />
 
 ## ビルトインコントロール
 

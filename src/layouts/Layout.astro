@@ -1,8 +1,8 @@
 ---
 import { ViewTransitions } from "astro:transitions";
-import Header from "../components/Header.astro";
-import Footer from "../components/Footer.astro";
-import SideNav from "../components/SideNav.astro";
+import Header from "../components/astro/Header.astro";
+import Footer from "../components/astro/Footer.astro";
+import SideNav from "../components/astro/SideNav.astro";
 import "../styles/global.css";
 interface Props {
   title: string;
@@ -36,7 +36,9 @@ const { title, h1 = true } = Astro.props;
   </head>
   <body class="bg-background text-foreground min-h-lvh grid grid-rows-layout">
     <Header transition:persist />
-    <main class="container w-svw md:w-full mx-auto px-5 py-8 md:flex gap-6 items-start">
+    <main
+      class="container w-svw md:w-full mx-auto px-5 py-8 md:flex gap-6 items-start"
+    >
       <nav class="hidden shrink-0 w-64 sticky top-24 md:block">
         <SideNav />
       </nav>

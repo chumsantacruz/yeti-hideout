@@ -1,10 +1,10 @@
 ---
-import {getAllPosts}  from "../utils/getAllPosts.ts"
+import { getAllPosts } from "../../utils/getAllPosts.ts";
 import WhitePanel from "./WhitePanel.astro";
 import ArticleCard from "./ArticleCard.astro";
 
-const posts = await getAllPosts()
-const latestPosts = posts.slice(0, 4)
+const posts = await getAllPosts();
+const latestPosts = posts.slice(0, 4);
 ---
 
 <WhitePanel>

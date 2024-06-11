@@ -1,7 +1,7 @@
 import { Canvas } from "@react-three/fiber";
-import Experience from "./Experience";
+import Experience from "./Example";
 
-export default function Test() {
+export default function ExampleCanvas({ number }) {
   return (
     <Canvas
       camera={{
@@ -10,7 +10,7 @@ export default function Test() {
         far: 1000,
       }}
     >
-      <Experience />
+      <Experience number={number} />
     </Canvas>
   );
 }

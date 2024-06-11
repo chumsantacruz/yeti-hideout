@@ -1,9 +1,9 @@
 ---
 import { getAllPhotos } from "../utils/getAllPhotos";
 import Layout from "./Layout.astro";
-import Pagination from "../components/Pagination.astro";
-import PhotoFrame from "../components/PhotoFrame.astro";
-import WhitePanel from "../components/WhitePanel.astro";
+import Pagination from "../components/astro/Pagination.astro";
+import PhotoFrame from "../components/astro/PhotoFrame.astro";
+import WhitePanel from "../components/astro/WhitePanel.astro";
 
 const photos = await getAllPhotos();
 const uniqueCameras = [...new Set(photos.map((photo) => photo.data.camera))];
