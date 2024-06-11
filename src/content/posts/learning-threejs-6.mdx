@@ -5,9 +5,8 @@ pubDate: 2024-06-10
 tag: ["three.js"]
 ---
 
-import MDXTargetBlank from "../../components/MDXTargetBlank.astro";
-import Example1 from "../../components/example/introduction-4/1/Example.astro";
-import Example2 from "../../components/example/introduction-4/2/Example.astro";
+import MDXTargetBlank from "../../components/mdx/MDXTargetBlank.astro";
+import Example from "../../components/example/threejs-introduction/4/Example.astro";
 
 ## Geometry
 
@@ -97,7 +96,7 @@ const positionsAttribute = new THREE.BufferAttribute(positionsArray, 3);
 geometry.setAttribute("position", positionsAttribute);
 ```
 
-<Example1 />
+<Example example={1} />
 
 ### Index
 
@@ -136,7 +135,7 @@ texture.colorSpace = THREE.SRGBColorSpace;
 const material = new THREE.MeshBasicMaterial({ map: texture });
 ```
 
-<Example2 />
+<Example example={2} />
 
 `TextureLoader`では、引数としてコールバック関数を渡すことで、以下のイベントに対して呼び出すことができる。
 

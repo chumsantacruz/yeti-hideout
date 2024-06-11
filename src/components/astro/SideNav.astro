@@ -1,0 +1,50 @@
+---
+import CameraTags from "./CameraTags.astro";
+import PostTags from "./PostTags.astro";
+
+const links = ["Home", "Posts", "Photos"];
+---
+
+<div class="grid auto-rows-max gap-4">
+  <ul class="bg-panel rounded shadow-sm text-3xl p-5 grid gap-5">
+    {
+      links.map((link) => {
+        if (link === "Home") {
+          return (
+            <li>
+              <a
+                class={`hover:opacity-70 underline-offset-4 ${Astro.url.pathname === "/" ? "underline" : null}`}
+                href="/"
+              >
+                {link}
+              </a>
+            </li>
+          );
+        } else {
+          return (
+            <li>
+              <a
+                class={`hover:opacity-70 underline-offset-4 ${Astro.url.pathname.startsWith(`/${link.toLowerCase()}`) ? "underline" : null}`}
+                href={`/${link.toLowerCase()}`}
+              >
+                {link}
+              </a>
+            </li>
+          );
+        }
+      })
+    }
+  </ul>
+  {
+    Astro.url.pathname.startsWith("/photos") ? (
+      <CameraTags />
+    ) : Astro.url.pathname.startsWith("/posts") ? (
+      <PostTags />
+    ) : (
+      <>
+        <PostTags />
+        <CameraTags />
+      </>
+    )
+  }
+</div>

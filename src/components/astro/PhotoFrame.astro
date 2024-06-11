@@ -1,0 +1,12 @@
+---
+import ImageFrame from "../../modules/ImageFrame.astro";
+
+const { slug } = Astro.props;
+---
+
+<a href={`/photos/${slug}/`} class="aspect-square block">
+  <ImageFrame
+    srcPaths={[`photos/${slug}.jpg`]}
+    classNames="h-full object-cover"
+  />
+</a>

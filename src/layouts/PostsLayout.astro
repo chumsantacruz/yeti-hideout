@@ -1,7 +1,7 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import ArticleCard from "../components/ArticleCard.astro";
-import Pagination from "../components/Pagination.astro";
+import ArticleCard from "../components/astro/ArticleCard.astro";
+import Pagination from "../components/astro/Pagination.astro";
 
 const { title, page } = Astro.props;
 ---
@@ -26,5 +26,5 @@ const { title, page } = Astro.props;
       )
     }
   </div>
-  <Pagination page={page}/>
+  <Pagination page={page} />
 </Layout>
