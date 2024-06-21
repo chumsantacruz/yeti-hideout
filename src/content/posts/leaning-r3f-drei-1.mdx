@@ -1,0 +1,131 @@
+---
+title: "r3fの周辺ライブラリ 学習メモ"
+description: "ライブラリの便利機能をメモしていく（随時更新）"
+pubDate: 2024-06-21
+tag: ["three.js"]
+---
+
+import MDXTargetBlank from "../../components/mdx/MDXTargetBlank.astro";
+
+## @react-three/drei
+
+`drei`は`React Three Fiber(r3f)`のライブラリで、r3f用の便利なヘルパー関数やコンポーネントを提供してくれるライブラリ。
+
+リポジトリ - <MDXTargetBlank url={'https://github.com/pmndrs/drei'} title={'https://github.com/pmndrs/drei'}/>
+
+たくさんの機能があり、ここに用途や使い方などをまとめていく。
+
+### AccumulativeShadowsとRandomizedLight
+
+指定したフレーム数の影を平面のオブジェクト上に蓄積してリアルで滑らかなソフトシャドウを作る。パーフォーマンスの面で優れている。
+
+主にRandaomizedLightコンポーネントと組み合わせて使う。
+
+RandomizedLight コンポーネントは、複数のライトのセットを揺らして、リアルなレイキャストのような影とアンビエントオクルージョンを作り出す。
+
+```jsx
+<AccumulativeShadows
+  temporal
+  frames={100}
+  alphaTest={0.85}
+  scale={10}
+  position={[0, 0, 0]}
+>
+  <RandomizedLight
+    amount={8}
+    radius={10}
+    intensity={1}
+    ambient={0.5}
+    position={[5, 5, -10]}
+    bias={0.001}
+  />
+</AccumulativeShadows>
+```
+
+- AccumulativeShadows
+
+  主なプロパティ
+
+  - `temporal`: フレームごとに影を蓄積するかどうかを指定します。trueにすると高品質な影になりますが、計算コストが高くなる。
+  - `frames`: 蓄積するフレーム数を指定します。フレーム数が多いほど影が滑らかになるが、その分だけ時間がかかる。
+  - `alphaTest`: 閾値以下のアルファピクセルを削除
+  - `scale`: 平面のスケール
+
+- RandomizedLight
+
+  主なプロパティ
+
+  - `amount`: 光源の数。
+  - `radius`: ライトのjiggleの値、値が大きいほど柔らかい光になる
+  - `intensity`: 光の強度。
+  - `ambient`: アンビエントオクルージョン。
+  - `position`: 光源の位置。
+  - `bias`: シャドウのバイアスを設定。シャドウのアーティファクトを防ぐために使用。
+
+### Center
+
+境界ボックスを計算し、それに応じて子要素をセンタリング。
+
+```js
+<Center top left>
+  <mesh />
+</Center>
+```
+
+### Decal
+
+ThreeのDecalGeometryを抽象化したもの。デフォルトでは親メッシュをデカールサーフェスとして使用。
+
+デカールボックスはサーフェスと交差する必要があり、交差しない場合は表示されない。
+
+```js
+<mesh>
+  <sphereGeometry />
+  <meshBasicMaterial />
+  <Decal
+    debug // デバッグ用
+    position={[0, 0, 0]}
+    rotation={[0, 0, 0]}
+    scale={1}
+  >
+    <meshBasicMaterial map={texture} polygonOffset polygonOffsetFactor={-1} />
+  </Decal>
+</mesh>
+```
+
+## maath
+
+three.js向けの数学ヘルパーのライブラリ
+
+リポジトリ - <MDXTargetBlank url={'https://github.com/pmndrs/maath'} title={'https://github.com/pmndrs/maath'}/>
+
+### Easing
+
+> Game Programming Gems 4 Chapter 1.10に基づくUnity-smooth-damping関数。これらは、THREE.Vector2D、3D、4D、オイラー（最短経路）、Matrix4、Quaternion、Colorにプリミティブ化された、高速で、リフレッシュレートに依存しない、中断可能なアニメーションプリミティブです。
+
+`easing`を使うことで、様々な動きにイージングをつけることができる。
+
+```js
+import {
+  damp, // for string
+  damp2, // for Vector2
+  damp3, // for Vector3
+  damp4, // for Vector4
+  dampE, // for Euler
+  dampM, // for Matrix4
+  dampQ, // for Quaternion
+  dampS, // for Spherical
+  dampC, // for Color
+} from "maath/easing";
+
+useFrame((state, delta) => {
+  // mesh.positionを[0, 1, 2]に
+  damp3(mesh.position, [0, 1, 2], 0.25, delta);
+
+  // マテリアルの色を変化
+  dampC(mesh.material.color, "green", 0.25, delta);
+
+  // mesh.rotationを[Math.PI / 2, 0, 0]に
+  dampE(mesh.rotation, [Math.PI / 2, 0, 0], 0.25, delta);
+});
+```
