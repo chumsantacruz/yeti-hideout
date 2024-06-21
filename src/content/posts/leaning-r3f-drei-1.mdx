@@ -1,0 +1,130 @@
+---
+title: "@react-three/drei 学習メモ"
+description: "dreiの便利機能をまとめる（随時更新）"
+pubDate: 2024-06-21
+tag: ["three.js"]
+---
+
+import MDXTargetBlank from "../../components/mdx/MDXTargetBlank.astro";
+
+## @react-three/drei とは
+
+`drei`は`React Three Fiber(r3f)`のライブラリで、r3f用の便利なヘルパー関数やコンポーネントを提供してくれるライブラリ。
+
+リポジトリ - <MDXTargetBlank url={'https://github.com/pmndrs/drei'} title={'https://github.com/pmndrs/drei'}/>
+
+たくさんの機能があり、ここに用途や使い方などをまとめていく。
+
+### AccumulativeShadows
+
+指定したフレーム数の間に影を蓄積してソフトシャドウを作る。パーフォーマンスの面で優れている。
+
+主にRandaomizedLightコンポーネントと組み合わせて使う。
+
+RandomizedLight コンポーネントは、ライトのセットを揺らして、リアルなレイキャストのような影とアンビエントオクルージョンを作り出す。
+
+```js
+type AccumulativeShadowsProps = JSX.IntrinsicElements['group'] & {
+  /** How many frames it can render, more yields cleaner results but takes more time, 40 */
+  frames?: number
+  /** If frames === Infinity blend controls the refresh ratio, 100 */
+  blend?: number
+  /** Can limit the amount of frames rendered if frames === Infinity, usually to get some performance back once a movable scene has settled, Infinity */
+  limit?: number
+  /** Scale of the plane,  */
+  scale?: number
+  /** Temporal accumulates shadows over time which is more performant but has a visual regression over instant results, false  */
+  temporal?: false
+  /** Opacity of the plane, 1 */
+  opacity?: number
+  /** Discards alpha pixels, 0.65 */
+  alphaTest?: number
+  /** Shadow color, black */
+  color?: string
+  /** Colorblend, how much colors turn to black, 0 is black, 2 */
+  colorBlend?: number
+  /** Buffer resolution, 1024 */
+  resolution?: number
+  /** Children should be randomized lights shining from different angles to emulate raycasting */
+  children?: React.ReactNode
+}
+```
+
+```js
+<AccumulativeShadows temporal frames={100} scale={10}>
+  <RandomizedLight amount={8} position={[5, 5, -10]} />
+</AccumulativeShadows>
+```
+
+### RandomizedLightとは
+
+内部で複数のライトを走らせ、それらを揺らすランダムライト。通常は AccumulativeShadows と組み合わせる。このコンポーネントはコンテキストを認識し、AccumulativeShadowsと組み合わせると、親からフレーム数を受け取ります。
+
+```js
+type RandomizedLightProps = JSX.IntrinsicElements['group'] & {
+  /** How many frames it will jiggle the lights, 1.
+   *  Frames is context aware, if a provider like AccumulativeShadows exists, frames will be taken from there!  */
+  frames?: number
+  /** Light position, [0, 0, 0] */
+  position?: [x: number, y: number, z: number]
+  /** Radius of the jiggle, higher values make softer light, 5 */
+  radius?: number
+  /** Amount of lights, 8 */
+  amount?: number
+  /** Light intensity, 1 */
+  intensity?: number
+  /** Ambient occlusion, lower values mean less AO, hight more, you can mix AO and directional light, 0.5 */
+  ambient?: number
+  /** If the lights cast shadows, this is true by default */
+  castShadow?: boolean
+  /** Default shadow bias, 0 */
+  bias?: number
+  /** Default map size, 512 */
+  mapSize?: number
+  /** Default size of the shadow camera, 10 */
+  size?: number
+  /** Default shadow camera near, 0.5 */
+  near?: number
+  /** Default shadow camera far, 500 */
+  far?: number
+}
+```
+
+```js
+<RandomizedLight castShadow amount={8} frames={100} position={[5, 5, -10]} />
+```
+
+### Center
+
+境界ボックスを計算し、それに応じて子要素ををセンタリングします。
+
+```js
+<Center top left>
+  <mesh />
+</Center>
+```
+
+### Decal
+
+ThreeのDecalGeometryを抽象化したもの。デフォルトでは親メッシュをデカールサーフェスとして使用します。
+
+デカールボックスはサーフェスと交差する必要があり、交差しない場合は表示されません。回転を指定しない場合は、親の中心点を見ます。回転を指定しない場合は、親の中心点を見ます。回転として数値を渡すこともできます。
+
+```js
+<mesh>
+  <sphereGeometry />
+  <meshBasicMaterial />
+  <Decal
+    debug // Makes "bounding box" of the decal visible
+    position={[0, 0, 0]} // Position of the decal
+    rotation={[0, 0, 0]} // Rotation of the decal (can be a vector or a degree in radians)
+    scale={1} // Scale of the decal
+  >
+    <meshBasicMaterial
+      map={texture}
+      polygonOffset
+      polygonOffsetFactor={-1} // The material should take precedence over the original
+    />
+  </Decal>
+</mesh>
+```
