@@ -93,6 +93,84 @@ ThreeのDecalGeometryを抽象化したもの。デフォルトでは親メッ�
 </mesh>
 ```
 
+### ScrollControls
+
+`ScrollControls`は、`canvas`の前面にHTMLスクロールコンテナを作成する。
+
+`<Scroll>`コンポーネント内に置かれた要素はスクロールの影響を受ける。
+
+`useScroll`Hookを使うことで、スクロールオフセットなどのデータを取得することができる。
+
+```js
+<ScrollControls pages={3} damping={0.1}>
+  {/* 以下のCanvasコンテンツはスクロールしないが、useScrollを受け取る */}
+  <SomeModel />
+  <Scroll>
+    {/*以下のCanvasコンテンツはスクロール */}
+    <Foo position={[0, 0, 0]} />
+    <Foo position={[0, viewport.height, 0]} />
+    <Foo position={[0, viewport.height * 1, 0]} />
+  </Scroll>
+  <Scroll html>
+    {/* 以下のCanvasコンテンツはスクロール */}
+    <h1>html in here (optional)</h1>
+    <h1 style={{ top: '100vh' }}>second page</h1>
+    <h1 style={{ top: '200vh' }}>third page</h1>
+  </Scroll>
+</ScrollControls>
+
+function Foo(props) {
+  const ref = useRef()
+  const data = useScroll()
+  useFrame(() => {
+    // data.offset = 現在のスクロール位置、0から1の間で変化し、減衰される
+    // data.delta = 現在のデルタ値、0から1の間で変化し、減衰される
+
+    // スクロールバーが開始位置にあるときに0になり、
+    // スクロール距離の1/3に達するまで1に増加する
+    const a = data.range(0, 1 / 3)
+    // スクロール距離の1/3に達すると増加し始め、
+    // 2/3に達すると1に到達する
+    const b = data.range(1 / 3, 1 / 3)
+    // 両端に0.1のマージン
+    const c = data.range(1 / 3, 1 / 3, 0.1)
+    // 選択された範囲で0-1-0の間で移動
+    const d = data.curve(1 / 3, 1 / 3)
+    // 両端に0.1のマージン
+    const e = data.curve(1 / 3, 1 / 3, 0.1)
+    // オフセットが範囲内にある場合はtrueを返し、範囲外の場合はfalseを返す
+    const f = data.visible(2 / 3, 1 / 3)
+    // visible関数にはマージンも指定できる
+    const g = data.visible(2 / 3, 1 / 3, 0.1)
+  })
+  return <mesh ref={ref} {...props} />
+}
+```
+プロパティ
+
+- `eps`:number 精度
+- `horizontal`:boolean 水平スクロール
+- `infinite`:boolean 無限スクロール
+- `pages`:number スクロールエリアの長さを定義、各ページは高さ100%
+- `distance`:number スクロールバーの移動距離を増加させる係数
+- `damping`:number 摩擦の係数
+- `maxSpeed`:number 最大速度を制限
+
+### Billboard
+
+常にカメラを向いている`<group />`を追加する。
+
+```js
+<Billboard
+  follow={true}
+  lockX={false}
+  lockY={false}
+  lockZ={false} // z軸の回転をロック (default=false)
+>
+  <Text fontSize={1}>I'm a billboard</Text>
+</Billboard>
+```
+
 ## maath
 
 three.js向けの数学ヘルパーのライブラリ
