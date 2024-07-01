@@ -1,0 +1,222 @@
+---
+title: "Typescriptの型のメモ"
+description: "Typescriptの型の使い方とかをメモ"
+pubDate: 2024-07-02
+tag: ["Typescript"]
+---
+
+## 交差型
+
+型を組み合わせることができる
+
+- オブジェクト型で使う場合、それぞれのオブジェクト型のプロパティが結合された型になる
+- Union型で使う場合は、それぞれのUnion型の共通部分の型になる
+
+```ts
+type Admin = {
+  name: string;
+  privileges: string[];
+};
+
+type Employee = {
+  name: string;
+  startDate: Date;
+};
+
+// それぞれのオブジェクト型のプロパティが結合された型になる
+type ElevatedEmployee = Admin & Employee;
+
+const e1: ElevatedEmployee = {
+  name: "max",
+  privileges: ["create-server"],
+  startDate: new Date(),
+};
+
+type Combinable = string | number;
+type Numeric = number | boolean;
+
+// number型になる
+type Universal = Combinable & Numeric;
+```
+
+## 型ガード
+
+ある値に対してif文などを用いて特定の型かどうかをチェックして、その結果に応じて条件を分岐させる方法
+
+```ts
+type Combinable = string | number;
+
+function add(a: Combinable, b: Combinable) {
+  // 引数のどちらかが文字列型だった場合は、文字列として返すようにする
+  if (typeof a === "string" || typeof b === "string") {
+    return a.toString() + b.toString();
+  }
+  return a + b;
+}
+
+type UnknownEmployee = Employee | Admin;
+
+function printEmployeeInformation(emp: UnknownEmployee) {
+  console.log(emp.name);
+  // 特定のプロパティが含まれているかどうかで判別
+  if ("privileges" in emp) {
+    console.log(`Privileges: ${emp.privileges}`);
+  }
+  if ("startDate" in emp) {
+    console.log(`Start Date: ${emp.startDate}`);
+  }
+}
+
+printEmployeeInformation(e1);
+
+class Car {
+  drive() {
+    console.log("運転中");
+  }
+}
+
+class Truck {
+  drive() {
+    console.log("トラック運転中");
+  }
+
+  loadCargo(amount: number) {
+    console.log(amount);
+  }
+}
+
+type Vehicle = Car | Truck;
+
+const v1 = new Car();
+const v2 = new Truck();
+
+function useVehicle(vehicle: Vehicle) {
+  vehicle.drive();
+  // 特定のクラスのインスタンスかどうかで判別
+  if (vehicle instanceof Truck) {
+    vehicle.loadCargo(3);
+  }
+}
+
+useVehicle(v1);
+useVehicle(v2);
+```
+
+## 判別可能なUnion型
+
+型に判別用の共通のプロパティを設定して、それを使って型を判別する方法
+
+```ts
+// それぞれのインターフェイスにtypeプロパティを設定
+interface Bird {
+  type: "bird";
+  flyingSpeed: number;
+}
+
+interface Horse {
+  type: "horse";
+  runningSpeed: number;
+}
+
+type Animal = Bird | Horse;
+
+function moveAnimal(animal: Animal) {
+  let speed;
+  // typeプロパティの値で判別
+  switch (animal.type) {
+    case "bird":
+      speed = animal.flyingSpeed;
+      break;
+    case "horse":
+      speed = animal.runningSpeed;
+  }
+  console.log("speed " + speed);
+}
+
+moveAnimal({ type: "bird", flyingSpeed: 100 });
+```
+
+## 型キャスト
+
+型を明示的に指定する方法
+
+```ts
+// 書き方1
+const userInputElement = <HTMLInputElement>(
+  document.getElementById("user-input")
+);
+
+// 書き方2
+const userInputElement = document.getElementById(
+  "user-input",
+) as HTMLInputElement;
+
+userInputElement.value = "hello";
+```
+
+## インデックス型
+
+オブジェクトのプロパティ名を明示的に指定せずに、プロパティ名の型とその値の型だけを指定して、柔軟にプロパティを追加できるようにする方法
+
+```ts
+interface ErrorContainer {
+  [key: string]: string;
+}
+
+const errorBag: ErrorContainer = {
+  email: "正しいメールアドレスではありません",
+  address: "正しい住所を入力してください",
+};
+```
+
+## 関数オーバーロード
+
+関数の引数の型や戻り値の値を、上書きして、複数の異なる引数や戻り値のパターンを指定することができる
+
+```ts
+function addOverLoad(a: number, b: number): number;
+function addOverLoad(a: string, b: string): string;
+function addOverLoad(a: number, b: string): string;
+function addOverLoad(a: string, b: number): string;
+function addOverLoad(a: Combinable, b: Combinable) {
+  if (typeof a === "string" || typeof b === "string") {
+    return a.toString() + b.toString();
+  }
+  return a + b;
+}
+
+// 引数がそれぞれ文字列型なので、
+// addOverLoad(a: string, b: string): string;
+// 上記の関数型が適用される
+const result = addOverLoad("Hello", "Typescript");
+result.split(" ");
+```
+
+## オプショナルチェーン
+
+オブジェクトの参照が`nul`lや`undefined`の場合でも、エラーを起こさずにプロパティを参照できる安全な方法
+
+```ts
+const fetchedUserDate = {
+  id: "u1",
+  name: "user1",
+  job: {
+    title: "Developer",
+    description: "Typescript",
+  },
+};
+
+console.log(fetchedUserDate?.job?.title);
+```
+
+## NULL合体演算子
+
+`??`演算子を使うことで、演算子の左辺が`null`または`undefined`の場合のみ右辺が適用される
+
+```ts
+const userInput = null;
+
+const storedData = userInput ?? "DEFAULT";
+
+console.log(storedData); // "DEFAULT"
+```
