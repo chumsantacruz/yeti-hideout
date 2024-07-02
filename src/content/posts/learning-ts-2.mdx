@@ -1,0 +1,438 @@
+---
+title: "Typescriptの型のメモ2"
+description: "Typescriptの型の使い方とかをメモ"
+pubDate: 2024-07-03
+tag: ["Typescript"]
+---
+
+## デコレータ
+
+```ts
+// デコレータはクラスが読み込まれる時に実行される
+
+/**
+ * クラスデコレータ
+ */
+
+// function Logger(constructor: Function) {
+//   console.log('Logging...');
+//   console.log(constructor);
+// }
+
+// @Logger
+// class Person {
+//   name = 'Max';
+
+//   constructor() {
+//     console.log('Creating person object...');
+//   }
+// }
+
+// const person = new Person();
+
+/**
+ * デコレータファクトリ
+ */
+
+function LoggerFactory(logString: string) {
+  console.log("LOGGER FACTORY");
+  return function (constructor: Function) {
+    console.log(logString);
+    console.log(constructor);
+  };
+}
+
+// @LoggerFactory('LOGGING - PERSON Factory')
+// class PersonFactory {
+//   name = 'Max Factory';
+
+//   constructor() {
+//     console.log('Creating factory person object...');
+//   }
+// }
+
+// const personFactory = new PersonFactory();
+
+/**
+ * 便利なデコレータ
+ */
+
+function WithTemplate(template: string, hookId: string) {
+  console.log("TEMPLATE FACTORY");
+  return function (constructor: any) {
+    console.log("Rendering template...");
+    const hookEl = document.getElementById(hookId);
+    const p = new constructor();
+    if (hookEl) {
+      hookEl.innerHTML = template;
+      hookEl.querySelector("h1")!.textContent = p.name;
+    }
+  };
+}
+
+// @WithTemplate("<h1>hello</h1>", "app")
+// class PersonTemplate {
+//   name = "Max Factory";
+
+//   constructor() {
+//     console.log("Creating factory person object...");
+//   }
+// }
+
+/**
+ * 複数のデコレータ
+ */
+
+// // デコレータは下から上に実行される
+// @LoggerFactory("LOGGING - PERSON Multiple") // ここが最後に実行される
+// @WithTemplate("<h1>hello</h1>", "app") // ここが先に実行される
+// class PersonMultiple {
+//   name = "Max Multiple";
+
+//   constructor() {
+//     console.log("Creating Multiple person object...");
+//   }
+// }
+
+/**
+ * プロパティデコレータ, アクセサデコレータ, メソッドデコレータ, パラメータデコレータ
+ */
+
+function Log(target: any, propertyName: string | Symbol) {
+  console.log("Property decorator!");
+  console.log(target, propertyName);
+}
+
+function Log2(target: any, name: string, descriptor: PropertyDescriptor) {
+  console.log("Accessor decorator!");
+  console.log(target);
+  console.log(name);
+  console.log(descriptor);
+}
+
+function Log3(
+  target: any,
+  name: string | symbol,
+  descriptor: PropertyDescriptor,
+) {
+  console.log("Method decorator!");
+  console.log(target);
+  console.log(name);
+  console.log(descriptor);
+}
+
+function Log4(target: any, name: string | symbol, position: number) {
+  console.log("Params decorator!");
+  console.log(target);
+  console.log(name);
+  console.log(position);
+}
+
+class Product {
+  @Log
+  title: string;
+  private _price: number;
+
+  @Log2
+  set price(val: number) {
+    if (val > 0) {
+      this._price = val;
+    } else {
+      throw new Error("Invalid price - should be positive!");
+    }
+  }
+
+  constructor(t: string, p: number) {
+    this.title = t;
+    this._price = p;
+  }
+
+  @Log3
+  getPriceWithTax(@Log4 tax: number) {
+    return this._price * (1 + tax);
+  }
+}
+
+// メソッドデコレータによるメソッドのバインド
+
+function AutoBind(_: any, _2: string, descriptor: PropertyDescriptor) {
+  const originalMethod = descriptor.value;
+  const adjDescriptor: PropertyDescriptor = {
+    configurable: true,
+    enumerable: false,
+    get() {
+      const bounceFn = originalMethod.bind(this);
+      return bounceFn;
+    },
+  };
+  return adjDescriptor;
+}
+
+class Printer {
+  message = "clicked";
+
+  @AutoBind
+  showMessage() {
+    console.log(this.message);
+  }
+}
+
+const p = new Printer();
+
+const button = document.querySelector("button")!;
+
+button.addEventListener("click", p.showMessage);
+
+/**
+ * クラスデコレータによるクラスの変更
+ */
+
+// function WithTemplate2(template: string, hookId: string) {
+//   console.log("TEMPLATE FACTORY");
+//   return function<T extends {new(...args: any[]): {name: string}}> (originalConstructor: T) {
+//     return class extends originalConstructor {
+//       constructor(..._: any[]) {
+//         super();
+//         console.log("Rendering template...");
+//         const hookEl = document.getElementById(hookId);
+//         if (hookEl) {
+//           hookEl.innerHTML = template;
+//           hookEl.querySelector("h1")!.textContent = this.name;
+//         }
+//       }
+//     };
+//   };
+// }
+
+// @WithTemplate2("<h1>hello</h1>", "app")
+// class PersonTemplate2 {
+//   name = "Max";
+
+//   constructor() {
+//     console.log("PersonTemplate2...");
+//   }
+// }
+
+// const personTemplate2 = new PersonTemplate2();
+
+/**
+ * プロパティデコレータによるバリデーション
+ */
+
+interface ValidatorConfig {
+  [prop: string]: {
+    [validatableProp: string]: string[]; // ['required', 'positive']
+  };
+}
+
+const registeredValidators: ValidatorConfig = {};
+
+function Required(target: any, propName: string) {
+  registeredValidators[target.constructor.name] = {
+    ...registeredValidators[target.constructor.name],
+    [propName]: [
+      ...(registeredValidators[target.constructor.name]?.[propName] ?? []),
+      "required",
+    ],
+  };
+}
+
+function PositiveNumber(target: any, propName: string) {
+  registeredValidators[target.constructor.name] = {
+    ...registeredValidators[target.constructor.name],
+    [propName]: [
+      ...(registeredValidators[target.constructor.name]?.[propName] ?? []),
+      "positive",
+    ],
+  };
+}
+
+function validate(obj: any) {
+  const objValidatorConfig = registeredValidators[obj.constructor.name];
+  if (!objValidatorConfig) {
+    return true;
+  }
+
+  let isValid = true;
+
+  for (const prop in objValidatorConfig) {
+    console.log(prop);
+    for (const validator of objValidatorConfig[prop]) {
+      switch (validator) {
+        case "required":
+          isValid = isValid && !!obj[prop];
+          break;
+        case "positive":
+          isValid = isValid && obj[prop] > 0;
+          break;
+      }
+    }
+  }
+
+  return isValid;
+}
+
+class Course {
+  @Required
+  title: string;
+  @PositiveNumber
+  price: number;
+
+  constructor(t: string, p: number) {
+    this.title = t;
+    this.price = p;
+  }
+}
+
+const courseForm = document.querySelector("form")!;
+courseForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const titleEl = document.getElementById("title") as HTMLInputElement;
+  const priceEl = document.getElementById("price") as HTMLInputElement;
+
+  const title = titleEl.value;
+  const price = +priceEl.value;
+
+  const createdCourse = new Course(title, price);
+  if (!validate(createdCourse)) {
+    alert("エラー");
+    return;
+  }
+  console.log(createdCourse);
+});
+```
+
+## Generics
+
+```ts
+/**
+ * Generics型
+ */
+const names: Array<string> = [];
+// names[0].split(' ');
+
+// const promise: Promise<string> = new Promise((resolve, reject) => {
+//   setTimeout(() => {
+//     resolve('This is done!');
+//   }, 2000)
+// })
+
+// promise.then(data => {
+//   data.split('')
+// })
+
+/**
+ * Generics関数
+ */
+function merge<T extends {}, U>(objA: T, objB: U) {
+  return Object.assign(objA, objB);
+}
+
+const mergedObj = merge({ name: "Max" }, { age: 30 });
+mergedObj.name;
+
+/**
+ * Genericsに制約を追加する
+ */
+function merge2<T extends object, U extends object>(objA: T, objB: U) {
+  return Object.assign(objA, objB);
+}
+
+const mergedObj2 = merge2({ name: "Max" }, { age: 30 });
+console.log(mergedObj2);
+
+/**
+ * もうひとつのGenerics関数
+ */
+interface Lengthy {
+  length: number;
+}
+
+function countAndDescribe<T extends Lengthy>(element: T): [T, string] {
+  let descriptionText = "Got no value.";
+  if (element.length > 0) {
+    descriptionText = `Got ${element.length} elements.`;
+  }
+  return [element, descriptionText];
+}
+
+console.log(countAndDescribe("Hi there!"));
+console.log(countAndDescribe(["Sports", "Cooking"]));
+console.log(countAndDescribe([]));
+
+/**
+ * keyof制約
+ */
+function extractAndConvert<T extends object, U extends keyof T>(
+  obj: T,
+  key: U,
+) {
+  return "Value: " + obj[key];
+}
+
+extractAndConvert({ name: "Max" }, "name");
+
+/**
+ * Genericsクラス
+ */
+class DataStorage<T extends string | number | boolean> {
+  private data: T[] = [];
+
+  addItem(item: T) {
+    this.data.push(item);
+  }
+
+  removeItem(item: T) {
+    if (this.data.indexOf(item) === -1) return;
+    this.data.splice(this.data.indexOf(item), 1);
+  }
+
+  getItems() {
+    return [...this.data];
+  }
+}
+
+const textStorage = new DataStorage<string>();
+textStorage.addItem("data1");
+textStorage.addItem("data2");
+textStorage.removeItem("data2");
+console.log(textStorage.getItems());
+
+const numberStorage = new DataStorage<number>();
+numberStorage.addItem(1);
+numberStorage.addItem(2);
+numberStorage.removeItem(2);
+console.log(numberStorage.getItems());
+
+// const objStorage = new DataStorage<object>()
+// const obj = {name: 'Max'}
+// objStorage.addItem(obj)
+// objStorage.addItem({name: 'Manu'})
+// objStorage.removeItem(obj)
+// console.log(objStorage.getItems())
+
+/**
+ * Genericsのユーティリティ
+ * https://www.typescriptlang.org/docs/handbook/utility-types.html
+ */
+interface CourseGoal {
+  title: string;
+  description: string;
+  completeUntil: Date;
+}
+
+function createCourseGoal(
+  title: string,
+  description: string,
+  completeUntil: Date,
+): CourseGoal {
+  let courseGoal: Partial<CourseGoal> = {};
+  courseGoal.title = title;
+  courseGoal.description = description;
+  courseGoal.completeUntil = completeUntil;
+  return courseGoal as CourseGoal;
+}
+
+const names2: Readonly<string[]> = ["Max", "Anna"];
+// names2.push('Manu')
+```
