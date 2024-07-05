@@ -1,0 +1,153 @@
+---
+title: "Typescript ジェネリクス"
+description: "Typescriptのジェネリクスについて"
+pubDate: 2024-07-03
+tag: ["Typescript"]
+---
+
+import MDXTargetBlank from "../../components/mdx/MDXTargetBlank.astro";
+
+## Generics
+
+Genericsは抽象的な型引数を使うことで、実際に利用されるまで型が確定しないコンポーネントや関数を実装することができる。
+
+### 基本的な使い方
+
+- Genericsを使用したい関数の後ろに`<>`で囲む形で型パラメータを指定する。
+- 型パラメータに使用する引数名はなんでもいいが、一般的には`T`が使われる。
+
+```ts
+function identity<T>(arg: T): T {
+  return arg;
+}
+
+let output1 = identity<string>("Hello TypeScript");
+let output2 = identity<number>(42);
+```
+
+- 複数の型パラメータを受け取ることもできる
+
+```ts
+function swap<T, U>(tuple: [T, U]): [U, T] {
+  return [tuple[1], tuple[0]];
+}
+
+let swappedTuple = swap([7, "seven"]); // ["seven", 7]
+```
+
+### ジェネリクスに制約を加える
+
+`extends`を使用してジェネリクスに制約を加えることで、特定のプロパティやメソッドが存在する型に限定することができる。
+
+```ts
+interface Lengthwise {
+  length: number;
+}
+
+function loggingIdentity<T extends Lengthwise>(arg: T): T {
+  console.log(arg.length);
+  return arg;
+}
+
+loggingIdentity({ length: 10, value: "Hello" }); // 10
+```
+
+上記の例では、ジェネリック型`T`が`Lengthwise`インターフェイスを拡張しているため、`T`型の型引数に`length`プロパティを強制させることになる。
+
+また、以下のように`keyof`を使って制約を加えることもできる
+
+```ts
+function extractAndConvert<T extends object, U extends keyof T>(
+  obj: T,
+  key: U,
+) {
+  return "Value: " + obj[key];
+}
+
+extractAndConvert({ name: "Max" }, "name");
+```
+
+### クラスにおけるジェネリクス
+
+```ts
+class DataStorage<T extends string | number | boolean> {
+  private data: T[] = [];
+
+  addItem(item: T) {
+    this.data.push(item);
+  }
+
+  removeItem(item: T) {
+    if (this.data.indexOf(item) === -1) return;
+    this.data.splice(this.data.indexOf(item), 1);
+  }
+
+  getItems() {
+    return [...this.data];
+  }
+}
+
+// string型
+const textStorage = new DataStorage<string>();
+textStorage.addItem("data1");
+textStorage.addItem("data2");
+textStorage.removeItem("data2");
+console.log(textStorage.getItems()); // ["data1"]
+
+// number型
+const numberStorage = new DataStorage<number>();
+numberStorage.addItem(1);
+numberStorage.addItem(2);
+numberStorage.removeItem(2);
+console.log(numberStorage.getItems()); // [1]
+```
+
+### インターフェイスにおけるジェネリクス
+
+```ts
+interface GenericIdentityFn<T> {
+  (arg: T): T;
+}
+
+function identity<T>(arg: T): T {
+  return arg;
+}
+
+let myIdentity: GenericIdentityFn<number> = identity;
+console.log(myIdentity(42)); // 42
+```
+
+## Genericsのユーティリティ
+
+Typescriptが独自に用意しているユーティリティ型が利用できる
+
+<MDXTargetBlank
+  url={"https://www.typescriptlang.org/docs/handbook/utility-types.html"}
+  title={"Utility Types"}
+/>
+
+以下では、`Partial`と`Readonly`というユーティリティ型を使用
+
+```ts
+interface CourseGoal {
+  title: string;
+  description: string;
+  completeUntil: Date;
+}
+
+function createCourseGoal(
+  title: string,
+  description: string,
+  completeUntil: Date,
+): CourseGoal {
+  let courseGoal: Partial<CourseGoal> = {};
+  courseGoal.title = title;
+  courseGoal.description = description;
+  courseGoal.completeUntil = completeUntil;
+  return courseGoal as CourseGoal;
+}
+
+const names2: Readonly<string[]> = ["Max", "Anna"];
+
+names2.push("Manu"); // Readonlyのためエラーになる
+```
