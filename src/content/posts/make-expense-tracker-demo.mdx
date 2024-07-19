@@ -1,0 +1,135 @@
+---
+title: "React,Bun,Honoを使った経費トラッカーアプリ"
+description: "Youtubeのチュートリアル動画を参考にアプリを作成"
+pubDate: 2024-07-19
+tag: ["Typescript"]
+---
+
+import MDXTargetBlank from "../../components/mdx/MDXTargetBlank.astro";
+
+- <MDXTargetBlank
+    url={"https://app.eraser.io/workspace/EsxbsS4v2g7Otkihy95b"}
+    title={"参考チュートリアル"}
+  />
+
+- <MDXTargetBlank
+    url={"https://chumsantacruz-expense-tracker-demo.fly.dev/"}
+    title={"成果物"}
+  />
+
+## 技術スタック
+
+- Typescript
+
+### フロントエンド
+
+- React 18/19
+- Tanstack Router
+- Tanstack Query
+- Tanstack Form
+- tailwind
+- shadcn-ui
+
+### バックエンド
+
+- bun
+- Hono
+- Hono TypeScript RPC
+- Zod
+- Kinde Auth
+
+### データベース
+
+- Drizzle ORM
+- Neon PG
+
+### ホスティング
+
+- fly.io VPS
+
+## 学習メモ
+
+### bun
+
+<MDXTargetBlank url={"https://bun.sh/"} />
+
+> JavaScriptとTypeScriptプロジェクトの開発、テスト、実行、バンドルはすべてBunで。Bunは、バンドル、テストランナー、Node.js互換のパッケージマネージャを備えた、スピードを追求したオールインワンのJavaScriptランタイム＆ツールキットです。
+
+- Node.jsに代わるZigプログラミング言語で書かれたJavaScriptランタイム
+- Node.jsとは異なり、Bunはnpmに依存せず、動作に外部依存を必要としません。代わりに標準ライブラリが組み込まれており、環境変数、HTTP、WebSocket、ファイルシステムなど、多様なプロトコルやモジュールに対応する機能を揃えています。
+- TypeScriptにもデフォルトで対応。BunはすべてのJavaScriptやTypeScriptのソースファイルを内部的にトランスパイルするため、追加の設定やトランスパイルなしに、TypeScriptファイルを直接コンパイルして実行します。
+
+### Hono
+
+<MDXTargetBlank url={"https://hono.dev/"} />
+
+> Hono - 日本語で炎🔥を意味する - は、Web標準に基づいて構築された、小さくシンプルで超高速なWebフレームワークです。どのJavaScriptランタイムでも動作します：Cloudflare Workers、Fastly Compute、Deno、Bun、Vercel、Netlify、AWS Lambda、Lambda@Edge、Node.js。
+
+#### Hono TypeScript RPC
+
+- Typescriptの型で、サーバーとクライアントの仕様を共有することができる機能
+- Web APIの仕様、特にインプット・アウトプットをサーバーとクライアント間で共有するためのもの
+- サーバーとクライアントのどちらともTypescriptを使用する必要がある。
+- RPCはRemote Procedure Call：リモートプロシージャコールの略。他にも<MDXTargetBlank url={'https://trpc.io/'} title={'tRPC'}/>というRPCフレームワークが有名。
+
+### Zod
+
+<MDXTargetBlank url={"https://zod.dev/"} />
+
+> ZodはTypeScriptファーストのスキーマ宣言・検証ライブラリ。スキーマという用語は、単純な文字列から複雑なネストされたオブジェクトまで、あらゆるデータ型を広く指すために使っている。<br />Zodは可能な限り開発者に優しく設計されている。ゴールは重複した型宣言をなくすことだ。Zodでは、バリデータを一度宣言すれば、Zodが自動的に静的なTypeScriptの型を推論してくれる。単純な型を複雑なデータ構造にまとめるのも簡単。
+
+TypeScriptで使用するためのスキーマ定義とバリデーションライブラリ。実行時（ランタイム）にデータの型安全性を保証し、APIのリクエストやレスポンスなど、外部からの入力データの検証を簡単に行うことができる。
+
+### Kinde Auth
+
+<MDXTargetBlank url={"https://kinde.com/"} />
+
+ユーザー認証などの機能を提供するプラットフォーム。
+
+### TanStack
+
+<MDXTargetBlank url={"https://tanstack.com/"} />
+
+TanStackは、ウェブ開発者向けの高品質なオープンソースライブラリのコレクション。
+
+このプロジェクトで使用されているライブラリは以下の通り。
+
+- TanStack Router：Reactアプリケーション向けの型安全なルーティング。
+- TanStack Query：非同期の状態管理とデータフェッチングを管理。
+- TanStack Form：ウェブアプリケーションのフォーム処理を簡素化
+
+これらのツールは、React、Vue、Svelte、AngularなどのJavaScriptフレームワークと互換性がある
+
+### shadcn-ui
+
+<MDXTargetBlank url={"https://ui.shadcn.com/"} />
+
+shadcn-uiIは、高品質なコンポーネントライブラリ。このライブラリは、美しくデザインされたコンポーネントを提供し、開発者がアプリケーションに簡単にコピー＆ペーストして利用できるように設計されている。UIフレームワークに依存せず、React、Vue、Solidなど様々なフレームワークと互換性がある
+
+### Drizzle ORM
+
+<MDXTargetBlank url={"https://orm.drizzle.team/"} />
+
+Drizzle ORMは、TypeScript向けの高性能な次世代ORM（オブジェクトリレーショナルマッピング）
+
+ORM（Object-Relational Mapping）は、オブジェクト指向プログラミングとリレーショナルデータベースの間のデータ変換を行う技術および概念。ORMを使うことで、開発者はデータベース操作をプログラム内のオブジェクトとして扱うことができ、SQLの記述を減らし、コードの可読性と保守性を向上させることができる。
+
+### Neon PG
+
+<MDXTargetBlank url={"https://neon.tech/"} />
+
+サーバーレスなPostgresデータベースを提供するDBaaS（Database as a Service）
+
+### fly.io VPS
+
+<MDXTargetBlank url={"https://fly.io/"} />
+
+アプリケーションをデプロイするためのプラットフォーム
+
+## ひとこと
+
+チュートリアル動画は3時間くらいあって、内容も英語なので完全に理解できてはいないけど、とりあえずアプリがチュートリアルの通りに動くところまではできた。
+
+解説している人がかなりのイケオジで良い声。あと英語の発音も割と聞き取りやすいから何となく言っていることも理解できた。
+
+フロントからバックエンド、データベースからデプロイまでを網羅的に抑えており、かつ最新の技術を使っているので、スゲーなと思った。
