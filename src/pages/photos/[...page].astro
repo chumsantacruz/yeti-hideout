@@ -4,7 +4,7 @@ import { getAllPhotos } from "../../utils/getAllPhotos";
 import PhotosLayout from "../../layouts/PhotosLayout.astro";
 
 export const getStaticPaths = (async ({ paginate }) => {
-  const photos = await getAllPhotos()
+  const photos = await getAllPhotos();
   return paginate(photos, { pageSize: 9 });
 }) satisfies GetStaticPaths;
 
@@ -12,5 +12,4 @@ const { page } = Astro.props;
 const title = "All Photos";
 ---
 
-<PhotosLayout title={title} page={page}>
-</PhotosLayout>
+<PhotosLayout title={title} page={page} />

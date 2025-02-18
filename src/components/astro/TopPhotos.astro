@@ -1,0 +1,12 @@
+---
+import WhitePanel from "./WhitePanel.astro";
+import RandomPhotos from "../react/RandomPhotos";
+---
+
+<WhitePanel>
+  <h2 class="text-3xl mb-4">Photos</h2>
+  <div class="grid grid-cols-3 grid-rows-3 md:grid-rows-none gap-1 mb-4">
+    <RandomPhotos client:load />
+  </div>
+  <a href="/photos/">and more...</a>
+</WhitePanel>
