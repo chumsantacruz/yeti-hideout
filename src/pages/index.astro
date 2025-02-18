@@ -2,8 +2,7 @@
 import Layout from "../layouts/Layout.astro";
 import SelfIntroduction from "../components/astro/SelfIntroduction.astro";
 import LatestPosts from "../components/astro/LatestPosts.astro";
-import RandomPhotos from "../components/astro/RandomPhotos.astro";
-
+import TopPhotos from "../components/astro/TopPhotos.astro";
 const title = "Yeti's Planet";
 ---
 
@@ -12,6 +11,6 @@ const title = "Yeti's Planet";
   <div class="grid gap-4">
     <SelfIntroduction />
     <LatestPosts />
-    <RandomPhotos client:load />
+    <TopPhotos />
   </div>
 </Layout>
