@@ -1,26 +1,9 @@
 ---
-import { getAllPhotos } from "../../utils/getAllPhotos";
 import WhitePanel from "./WhitePanel.astro";
-import PhotoFrame from "./PhotoFrame.astro";
 import RandomPhotos from "../react/RandomPhotos";
-
-const photos = await getAllPhotos();
-const photoSlugs = photos.map((photo) => photo.slug);
-
-function getRandomIndex(max: number) {
-  return Math.floor(Math.random() * max);
-}
-
-let randomPhotos = [];
-
-for (let i = 0; i < 9; i++) {
-  randomPhotos.push(...photoSlugs.splice(getRandomIndex(photoSlugs.length), 1));
-}
-
-const { allPhotos = photos } = Astro.props;
 ---
 
-<WhitePanel date-photos={allPhotos}>
+<WhitePanel>
   <h2 class="text-3xl mb-4">Photos</h2>
   <div class="grid grid-cols-3 grid-rows-3 md:grid-rows-none gap-1 mb-4">
     <RandomPhotos client:load />
